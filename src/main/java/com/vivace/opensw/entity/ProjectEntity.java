@@ -1,13 +1,11 @@
 package com.vivace.opensw.entity;
 
 import jakarta.persistence.*;
-import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
-public class Project {
+public class ProjectEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name="id",updatable = false)
