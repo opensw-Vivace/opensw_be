@@ -3,6 +3,7 @@ package com.vivace.opensw.entity;
 import jakarta.persistence.*;
 
 import java.util.Date;
+import java.util.List;
 
 @Entity
 public class ProjectEntity {
@@ -22,6 +23,9 @@ public class ProjectEntity {
   private int iterationLen;
   @Column
   private String status;
+
+
+
 
 
 }

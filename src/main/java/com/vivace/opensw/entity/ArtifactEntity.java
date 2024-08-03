@@ -27,4 +27,9 @@ public class ArtifactEntity extends BaseEntity{
   @JoinColumn(name = "artifactType_id")
   ArtifactTypeEntity artifactTypeEntity;
 
+  @OneToMany(mappedBy = "imgEntity_id")
+  ImgEntity imgEntity;
+  @OneToMany(mappedBy = "creatorEntity_id")
+  CreatorEntity creatorEntity;
+
 }
