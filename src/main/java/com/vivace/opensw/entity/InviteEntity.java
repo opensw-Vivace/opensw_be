@@ -15,14 +15,14 @@ public class InviteEntity extends  BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "project_id")
-    private ProjectEntity project;
+    private ProjectEntity projectEntity;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "sender_id")
-    private MemberEntity sender;
+    private MemberEntity senderEntity;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "receiver_id")
-    private MemberEntity receiver;
+    private MemberEntity receiverEntity;
 
 }

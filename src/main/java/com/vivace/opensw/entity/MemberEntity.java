@@ -2,6 +2,8 @@ package com.vivace.opensw.entity;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 public class MemberEntity extends BaseEntity{
 
@@ -20,4 +22,19 @@ public class MemberEntity extends BaseEntity{
 
     @Column
     private Boolean status;
+
+    @OneToMany(mappedBy = "memberEntity")
+    private List<ParticipateEntity> participateEntityList;
+
+    @OneToMany(mappedBy = "memberEntity")
+    private List<IssueEntity> issueEntityList;
+
+    @OneToMany(mappedBy = "memberEntity")
+    private List<ToDoEntity> toDoEntityList;
+
+    @OneToMany(mappedBy = "memberEntity")
+    private List<InviteEntity> inviteEntityList;
+
+
+
 }
