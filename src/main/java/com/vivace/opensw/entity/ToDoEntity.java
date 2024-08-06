@@ -30,7 +30,7 @@ public class ToDoEntity extends  BaseEntity {
 
 
   @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.REMOVE)
-  @JoinColumn(name="Member_id")
+  @JoinColumn(name="member_id")
   MemberEntity memberEntity;
 
 
