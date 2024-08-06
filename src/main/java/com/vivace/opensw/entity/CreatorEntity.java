@@ -1,7 +1,12 @@
 package com.vivace.opensw.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
+@Entity
+@Getter
+@Setter
 public class CreatorEntity extends BaseEntity{
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -9,12 +14,14 @@ public class CreatorEntity extends BaseEntity{
   private Long id;
 
   @Column
-  Boolean complete;
+  private Boolean complete;
+
   @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.REMOVE)
   @JoinColumn(name = "member_id")
-  MemberEntity memberEntity;
+  private MemberEntity memberEntity;
+
   @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.REMOVE)
   @JoinColumn(name="artifact_id")
-  ArtifactEntity artifactEntity;
+  private ArtifactEntity artifactEntity;
 
 }

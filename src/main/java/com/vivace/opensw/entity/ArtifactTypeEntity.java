@@ -2,6 +2,8 @@ package com.vivace.opensw.entity;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 public class ArtifactTypeEntity {
 
@@ -11,4 +13,10 @@ public class ArtifactTypeEntity {
 
     @Column
     private String type; //산출물 종류.
+
+    @OneToMany(mappedBy = "artifactTypeEntity")
+    private List<NecessaryArtifactTypeEntity> necessaryArtifactTypeEntityList;
+
+    @OneToMany(mappedBy = "artifact")
+    private List<ArtifactEntity> artifactEntityList;
 }

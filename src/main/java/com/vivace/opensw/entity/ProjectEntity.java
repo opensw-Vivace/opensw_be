@@ -40,7 +40,7 @@ public class ProjectEntity {
   private List<ArtifactEntity> artifactEntityList;
 
   @OneToMany(mappedBy = "projectEntity")
-  private List<> ;
+  private List<NecessaryArtifactTypeEntity> necessaryArtifactTypeEntityList;
 
 
 
