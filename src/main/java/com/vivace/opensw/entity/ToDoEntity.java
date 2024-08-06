@@ -26,12 +26,12 @@ public class ToDoEntity extends  BaseEntity {
 
   @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.REMOVE)
   @JoinColumn(name="project_id")
-  ProjectEntity projectEntity;
+  private ProjectEntity projectEntity;
 
 
   @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.REMOVE)
   @JoinColumn(name="member_id")
-  MemberEntity memberEntity;
+  private MemberEntity memberEntity;
 
 
 
