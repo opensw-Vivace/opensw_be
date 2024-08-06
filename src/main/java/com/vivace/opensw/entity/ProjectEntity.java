@@ -3,6 +3,7 @@ package com.vivace.opensw.entity;
 import jakarta.persistence.*;
 
 import java.util.Date;
+import java.util.List;
 
 @Entity
 public class ProjectEntity {
@@ -22,6 +23,24 @@ public class ProjectEntity {
   private int iterationLen;
   @Column
   private String status;
+
+  @OneToMany(mappedBy = "projectEntity")
+  private List<ParticipateEntity> participateEntityList;
+
+  @OneToMany(mappedBy = "projectEntity")
+  private List<ToDoEntity> toDoEntityList;
+
+  @OneToMany(mappedBy = "projectEntity")
+  private List<IssueEntity> issueEntityList;
+
+  @OneToMany(mappedBy = "projectEntity")
+  private List<InviteEntity> inviteEntityList;
+
+  @OneToMany(mappedBy = "projectEntity")
+  private List<ArtifactEntity> artifactEntityList;
+
+  @OneToMany(mappedBy = "projectEntity")
+  private List<> ;
 
 
 }
