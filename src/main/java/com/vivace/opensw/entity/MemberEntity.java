@@ -24,7 +24,7 @@ public class MemberEntity extends BaseEntity{
     private Boolean status;
 
     @OneToMany(mappedBy = "memberEntity")
-    private List<ParticipateEntity> participateEntityList;
+    private List<PositionEntity> positionEntityList;
 
     @OneToMany(mappedBy = "memberEntity")
     private List<IssueEntity> issueEntityList;
@@ -32,9 +32,10 @@ public class MemberEntity extends BaseEntity{
     @OneToMany(mappedBy = "memberEntity")
     private List<ToDoEntity> toDoEntityList;
 
-    @OneToMany(mappedBy = "memberEntity")
-    private List<InviteEntity> inviteEntityList;
+    @OneToMany(mappedBy = "senderEntity")
+    private List<InviteEntity> receivedInvitationList;
 
-
+    @OneToMany(mappedBy = "receiverEntity")
+    private List<InviteEntity> sendInvicationList;
 
 }

@@ -9,4 +9,8 @@ public class ImgEntity extends BaseEntity{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "artifact_id")
+    private ArtifactEntity artifactEntity;
+
 }

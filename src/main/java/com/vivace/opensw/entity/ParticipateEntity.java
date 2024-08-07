@@ -20,7 +20,7 @@ public class ParticipateEntity extends BaseEntity{
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "project_id")
-    private ProjectEntity project;
+    private ProjectEntity projectEntity;
 
     @OneToMany(mappedBy = "participateEntity")
     private List<PositionEntity> positionEntityList;

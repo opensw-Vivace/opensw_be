@@ -17,6 +17,6 @@ public class ArtifactTypeEntity {
     @OneToMany(mappedBy = "artifactTypeEntity")
     private List<NecessaryArtifactTypeEntity> necessaryArtifactTypeEntityList;
 
-    @OneToMany(mappedBy = "artifact")
+    @OneToMany(mappedBy = "artifactTypeEntity")
     private List<ArtifactEntity> artifactEntityList;
 }

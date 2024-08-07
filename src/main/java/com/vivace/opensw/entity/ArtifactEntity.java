@@ -25,18 +25,19 @@ public class ArtifactEntity extends BaseEntity{
 
   @Column
   private Date deadline;
+
   @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.REMOVE)
   @JoinColumn(name = "project_id")
-  ProjectEntity projectEntity;
+  private ProjectEntity projectEntity;
 
   @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.REMOVE)
   @JoinColumn(name = "artifactType_id")
-  ArtifactTypeEntity artifactTypeEntity;
+  private ArtifactTypeEntity artifactTypeEntity;
 
-  @OneToMany(mappedBy = "imgEntity_id")
+  @OneToMany(mappedBy = "artifactEntity")
   private List<ImgEntity> imgEntityList;
 
-  @OneToMany(mappedBy = "creatorEntity_id")
+  @OneToMany(mappedBy = "artifactEntity")
   private List<CreatorEntity> creatorEntityList;
 
 }
