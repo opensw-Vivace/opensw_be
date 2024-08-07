@@ -25,6 +25,7 @@ public class AddProject {
   private List<InviteEntity> inviteEntityList;
   private List<ArtifactEntity> artifactEntityList;
   private List<NecessaryArtifactTypeEntity> necessaryArtifactTypeEntityList;
+
   public ProjectEntity toEntity(){
     return ProjectEntity.builder()
         .title(title)

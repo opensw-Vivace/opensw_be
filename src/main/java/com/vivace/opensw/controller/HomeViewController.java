@@ -1,6 +1,6 @@
 package com.vivace.opensw.controller;
 
-import com.vivace.opensw.Service.ProjectService;
+import com.vivace.opensw.service.ProjectService;
 import com.vivace.opensw.dto.ProjectListView;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
