@@ -6,6 +6,8 @@ import com.vivace.opensw.repository.ProjectRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @Service
 public class ProjectService {
@@ -13,4 +15,11 @@ public class ProjectService {
   public ProjectEntity save(AddProject addProject){//생성시 프로젝트 저장
      return projectRepository.save(addProject.toEntity());
   }
+  public List<ProjectEntity> findAll(){
+    return projectRepository.findAll();
+  }
+  public void delete(long id){
+    projectRepository.deleteById(id);
+  }
+
 }
