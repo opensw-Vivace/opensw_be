@@ -1,6 +1,6 @@
 package com.vivace.opensw.controller;
 
-import com.vivace.opensw.service.ProjectService;
+import com.vivace.opensw.Service.ProjectService;
 import com.vivace.opensw.dto.AddProject;
 import com.vivace.opensw.entity.ProjectEntity;
 import com.vivace.opensw.repository.ProjectRepository;

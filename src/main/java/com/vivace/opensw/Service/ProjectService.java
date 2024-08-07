@@ -1,4 +1,4 @@
-package com.vivace.opensw.service;
+package com.vivace.opensw.Service;
 
 import com.vivace.opensw.dto.AddProject;
 import com.vivace.opensw.entity.ProjectEntity;
