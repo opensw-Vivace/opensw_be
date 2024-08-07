@@ -1,11 +1,16 @@
 package com.vivace.opensw.entity;
 
 import jakarta.persistence.*;
+import lombok.*;
 
 import java.util.Date;
 import java.util.List;
 
 @Entity
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@Builder//빌더패턴으로 객체 생성을 위해서
 public class ProjectEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -41,8 +46,6 @@ public class ProjectEntity {
 
   @OneToMany(mappedBy = "projectEntity")
   private List<NecessaryArtifactTypeEntity> necessaryArtifactTypeEntityList;
-
-
 
 
 
