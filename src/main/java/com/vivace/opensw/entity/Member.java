@@ -1,10 +1,12 @@
 package com.vivace.opensw.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
 
 import java.util.List;
 
 @Entity
+@Getter
 public class Member extends BaseEntity{
 
     @Id
