@@ -7,7 +7,7 @@ import lombok.Setter;
 @Entity
 @Setter
 @Getter
-public class PositionEntity {
+public class Position {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,11 +18,11 @@ public class PositionEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
-    private MemberEntity memberEntity;
+    private Member member;
 
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name = "participate_id")
-    private ParticipateEntity participateEntity;
+    private Participate participate;
 
 
 }

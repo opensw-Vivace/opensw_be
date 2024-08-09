@@ -7,7 +7,7 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-public class CreatorEntity extends BaseEntity{
+public class Creator extends BaseEntity{
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name="id",updatable = false)
@@ -18,10 +18,10 @@ public class CreatorEntity extends BaseEntity{
 
   @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.REMOVE)
   @JoinColumn(name = "member_id")
-  private MemberEntity memberEntity;
+  private Member member;
 
   @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.REMOVE)
   @JoinColumn(name="artifact_id")
-  private ArtifactEntity artifactEntity;
+  private Artifact artifact;
 
 }
