@@ -11,7 +11,7 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder//빌더패턴으로 객체 생성을 위해서
-public class ProjectEntity {
+public class Project {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name="id",updatable = false)
@@ -29,23 +29,23 @@ public class ProjectEntity {
   @Column
   private String status;
 
-  @OneToMany(mappedBy = "projectEntity")
-  private List<ParticipateEntity> participateEntityList;
+  @OneToMany(mappedBy = "project")
+  private List<Participate> participateList;
 
-  @OneToMany(mappedBy = "projectEntity")
-  private List<ToDoEntity> toDoEntityList;
+  @OneToMany(mappedBy = "project")
+  private List<ToDo> toDoList;
 
-  @OneToMany(mappedBy = "projectEntity")
-  private List<IssueEntity> issueEntityList;
+  @OneToMany(mappedBy = "project")
+  private List<Issue> issueList;
 
-  @OneToMany(mappedBy = "projectEntity")
-  private List<InviteEntity> inviteEntityList;
+  @OneToMany(mappedBy = "project")
+  private List<Invite> inviteList;
 
-  @OneToMany(mappedBy = "projectEntity")
-  private List<ArtifactEntity> artifactEntityList;
+  @OneToMany(mappedBy = "project")
+  private List<Artifact> artifactList;
 
-  @OneToMany(mappedBy = "projectEntity")
-  private List<NecessaryArtifactTypeEntity> necessaryArtifactTypeEntityList;
+  @OneToMany(mappedBy = "project")
+  private List<NecessaryArtifactType> necessaryArtifactTypeList;
 
 
 
