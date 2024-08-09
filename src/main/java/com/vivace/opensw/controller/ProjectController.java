@@ -1,16 +1,20 @@
 package com.vivace.opensw.controller;
 
+import com.vivace.opensw.dto.ProjectListView;
 import com.vivace.opensw.service.ProjectService;
 import com.vivace.opensw.dto.AddProject;
 import com.vivace.opensw.entity.Project;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @RestController//겍체 데이터를 json으로 반환하기 위해서 추가함
-public class HomeController {
+public class ProjectController {
 
   private final ProjectService projectService;
 
@@ -21,6 +25,16 @@ public class HomeController {
         .body(savedProject);
 
   }
+  @GetMapping("/projects")
+  public String getProjects(Model model){
+    List<ProjectListView> projects=projectService.findAll()
+        .stream()
+        .map(ProjectListView::new)
+        .toList();
+    model.addAttribute("projects",projects);
+    return "projectList";
+  }
+
 
 
   @DeleteMapping("/api/projects/{id}")
