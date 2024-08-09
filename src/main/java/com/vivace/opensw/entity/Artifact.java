@@ -11,7 +11,7 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
-public class ArtifactEntity extends BaseEntity{
+public class Artifact extends BaseEntity{
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column
@@ -28,16 +28,16 @@ public class ArtifactEntity extends BaseEntity{
 
   @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.REMOVE)
   @JoinColumn(name = "project_id")
-  private ProjectEntity projectEntity;
+  private Project project;
 
   @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.REMOVE)
-  @JoinColumn(name = "artifactType_id")
-  private ArtifactTypeEntity artifactTypeEntity;
+  @JoinColumn(name = "artifact_type_id")
+  private ArtifactType artifactType;
 
-  @OneToMany(mappedBy = "artifactEntity")
-  private List<ImgEntity> imgEntityList;
+  @OneToMany(mappedBy = "artifact")
+  private List<Img> imgList;
 
-  @OneToMany(mappedBy = "artifactEntity")
-  private List<CreatorEntity> creatorEntityList;
+  @OneToMany(mappedBy = "artifact")
+  private List<Creator> creatorList;
 
 }

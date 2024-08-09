@@ -1,6 +1,6 @@
 package com.vivace.opensw.dto;
 
-import com.vivace.opensw.entity.ProjectEntity;
+import com.vivace.opensw.entity.Project;
 import lombok.Getter;
 
 import java.util.Date;
@@ -12,7 +12,7 @@ public class ProjectListView {
   private final String description;
   private final Date deadline;
 
-  public ProjectListView(ProjectEntity projectEntity){
+  public ProjectListView(Project projectEntity){
     this.id=projectEntity.getId();
     this.title=projectEntity.getTitle();
     this.description=projectEntity.getDescription();

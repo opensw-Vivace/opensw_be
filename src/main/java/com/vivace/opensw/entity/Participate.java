@@ -9,7 +9,7 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
-public class ParticipateEntity extends BaseEntity{
+public class Participate extends BaseEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,8 +20,8 @@ public class ParticipateEntity extends BaseEntity{
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "project_id")
-    private ProjectEntity projectEntity;
+    private Project project;
 
-    @OneToMany(mappedBy = "participateEntity")
-    private List<PositionEntity> positionEntityList;
+    @OneToMany(mappedBy = "participate")
+    private List<Position> positionList;
 }

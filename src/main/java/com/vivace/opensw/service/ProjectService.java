@@ -1,10 +1,9 @@
-package com.vivace.opensw.Service;
+package com.vivace.opensw.service;
 
 import com.vivace.opensw.dto.AddProject;
-import com.vivace.opensw.entity.ProjectEntity;
+import com.vivace.opensw.entity.Project;
 import com.vivace.opensw.repository.ProjectRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,12 +17,12 @@ public class ProjectService {
 
 
 
-  public ProjectEntity save(AddProject addProject) {//생성시 프로젝트 저장
+  public Project save(AddProject addProject) {//생성시 프로젝트 저장
      return projectRepository.save(addProject.toEntity());
 
   }
 
-  public List<ProjectEntity> findAll(){
+  public List<Project> findAll(){
     return projectRepository.findAll();
   }
 

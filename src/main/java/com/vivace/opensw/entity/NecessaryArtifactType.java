@@ -7,7 +7,7 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-public class NecessaryArtifactTypeEntity {
+public class NecessaryArtifactType {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -15,9 +15,9 @@ public class NecessaryArtifactTypeEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "project_id")
-    private ProjectEntity projectEntity;
+    private Project project;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "artifactType_id")
-    private ArtifactTypeEntity artifactTypeEntity;
+    @JoinColumn(name = "artifact_type_id")
+    private ArtifactType artifactType;
 }
