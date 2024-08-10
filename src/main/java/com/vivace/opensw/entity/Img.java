@@ -12,7 +12,8 @@ public class Img extends BaseEntity{
     private Long id;
 
     @Column
-    private String img_path;
+    private String path;
+
     @ManyToOne(fetch =FetchType.LAZY,cascade = CascadeType.REMOVE)
     @JoinColumn(name="artifact_id")
     private Artifact artifact;
