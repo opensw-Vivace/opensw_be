@@ -47,6 +47,4 @@ public class Project {
   @OneToMany(mappedBy = "project")
   private List<NecessaryArtifactType> necessaryArtifactTypeList;
 
-
-
 }
