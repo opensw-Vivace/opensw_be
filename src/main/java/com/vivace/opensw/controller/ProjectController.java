@@ -1,5 +1,4 @@
 package com.vivace.opensw.controller;
-
 import com.vivace.opensw.dto.ProjectListView;
 import com.vivace.opensw.service.ProjectService;
 import com.vivace.opensw.dto.AddProject;
@@ -11,7 +10,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
 @RequiredArgsConstructor
 @RestController//겍체 데이터를 json으로 반환하기 위해서 추가함
 public class ProjectController {
@@ -34,7 +32,13 @@ public class ProjectController {
     model.addAttribute("projects",projects);
     return "projectList";
   }
-
+  @GetMapping("/projects/{projectId}")
+  public String getProject(@PathVariable("projectId") Long id,Model model){
+    Project project=projectService.findById(id);
+    ProjectListView projectDto=new ProjectListView(project);
+    model.addAttribute("project",projectDto);
+    return "project";
+  }
 
 
   @DeleteMapping("/api/projects/{id}")
