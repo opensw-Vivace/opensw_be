@@ -24,9 +24,4 @@ public class Member extends BaseEntity{
     private Boolean status;
 
 
-
-
-
-
-
 }

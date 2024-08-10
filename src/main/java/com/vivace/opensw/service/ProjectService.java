@@ -1,6 +1,7 @@
 package com.vivace.opensw.service;
 
 import com.vivace.opensw.dto.AddProject;
+import com.vivace.opensw.entity.Participate;
 import com.vivace.opensw.entity.Project;
 import com.vivace.opensw.repository.ProjectRepository;
 import lombok.RequiredArgsConstructor;
@@ -32,7 +33,14 @@ public class ProjectService {
   public void deleteById(long id){
     projectRepository.deleteById(id);
   }
-
+  public List<Participate> getProjectParticipants(Long id){
+    Project project=findById(id);
+    if(project!=null){
+      return project.getParticipateList();
+    }
+    else
+      return null;
+  }
 
 
 }

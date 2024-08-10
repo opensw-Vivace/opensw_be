@@ -1,5 +1,7 @@
 package com.vivace.opensw.controller;
 import com.vivace.opensw.dto.ProjectListView;
+import com.vivace.opensw.entity.Member;
+import com.vivace.opensw.entity.Participate;
 import com.vivace.opensw.service.ProjectService;
 import com.vivace.opensw.dto.AddProject;
 import com.vivace.opensw.entity.Project;
@@ -36,12 +38,23 @@ public class ProjectController {
   }
 
   @GetMapping("/projects/{projectId}")
-  public String getProject(@PathVariable("projectId") Long id,Model model){
+  public ResponseEntity<ProjectListView> getProject(@PathVariable("projectId") Long id){
     Project project=projectService.findById(id);
     ProjectListView projectDto=new ProjectListView(project);
-    model.addAttribute("project",projectDto);
-    return "project";
+    return ResponseEntity.status(HttpStatus.CREATED)
+        .body(projectDto);
   }
+  @GetMapping("/projects/{projectId}/members")
+  public ResponseEntity<List<Participate>> getProjectMembers(@PathVariable("projectId") Long id){
+    Project project=projectService.findById(id);
+    if(project==null){
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+    }
+    List<Participate> participates=projectService.getProjectParticipants(id);
+    return ResponseEntity.status(HttpStatus.CREATED)
+        .body(participates);
+  }
+
 
 
   @DeleteMapping("/api/projects/{id}")
