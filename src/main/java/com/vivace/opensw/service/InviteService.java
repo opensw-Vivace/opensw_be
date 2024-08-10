@@ -62,6 +62,21 @@ public class InviteService {
 
         //리스트 반환
         return inviteDtoList;
-
     }
+
+
+    /**
+     * 초대장 수락
+     */
+
+
+    /**
+     * 초대장 삭제(거절)
+     */
+    public void deleteById(Long id){
+        inviteRepository.deleteById(id);
+    }
+
+
+
 }

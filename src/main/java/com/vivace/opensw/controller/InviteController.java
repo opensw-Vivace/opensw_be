@@ -6,10 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -36,6 +33,14 @@ public class InviteController {
     @GetMapping("/invitations/{receiverId}")
     public ResponseEntity<List<InviteDto>> findByReceiverId(@PathVariable Long receiverId){
         return ResponseEntity.status(HttpStatus.OK).body(inviteService.findByReceiverId(receiverId)) ;
+    }
+
+    /**
+     * 초대장 거절. deletemapping 사용 가능한지 테스트 해볼 것
+     */
+    @DeleteMapping("/invitations/{invitationId}")
+    public void reject(@PathVariable Long invitationId){
+        inviteService.deleteById(invitationId);
     }
 
 
