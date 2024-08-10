@@ -16,22 +16,25 @@ public class ProjectController {
 
   private final ProjectService projectService;
 
-  @PostMapping("/api/projects")//api/projects를 addproject와 매핑
+  @PostMapping("/projects")//projects를 addproject와 매핑
   public ResponseEntity<Project> addProject(@RequestBody AddProject addProject){
     Project savedProject= projectService.save(addProject);
     return ResponseEntity.status(HttpStatus.CREATED)
         .body(savedProject);
 
   }
+
   @GetMapping("/projects")
-  public String getProjects(Model model){
-    List<ProjectListView> projects=projectService.findAll()
+  public ResponseEntity<List<ProjectListView>> getProjects() {
+    List<ProjectListView> projects = projectService.findAll()
         .stream()
         .map(ProjectListView::new)
         .toList();
-    model.addAttribute("projects",projects);
-    return "projectList";
+
+    return ResponseEntity.status(HttpStatus.CREATED)
+        .body(projects);
   }
+
   @GetMapping("/projects/{projectId}")
   public String getProject(@PathVariable("projectId") Long id,Model model){
     Project project=projectService.findById(id);
