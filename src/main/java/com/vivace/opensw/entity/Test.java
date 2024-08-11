@@ -3,6 +3,7 @@ package com.vivace.opensw.entity;
 import com.vivace.opensw.global.BaseEntity;
 import com.vivace.opensw.model.TestStatus;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -15,10 +16,12 @@ import lombok.*;
 public class Test extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(updatable = false)
     private Long id;
 
     @Column
-    @NotEmpty
+    @NotNull
+    @NotBlank
     private String title;
 
     @Column

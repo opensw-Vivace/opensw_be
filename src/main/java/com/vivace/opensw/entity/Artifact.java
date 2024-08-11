@@ -1,43 +1,55 @@
 package com.vivace.opensw.entity;
 
+import com.vivace.opensw.global.BaseEntity;
+import com.vivace.opensw.model.ArtifactStatus;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import lombok.*;
 
-import javax.annotation.processing.Generated;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 @Entity
 @Getter
-@Setter
-public class Artifact extends BaseEntity{
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column
-  private Long id;
-  @Column
-  private String title;
-  @Column
-  private String subtitle;
-  @Column
-  private String status;
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
+@Builder
+public class Artifact extends BaseEntity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(updatable = false)
+    private Long id;
 
-  @Column
-  private Date deadline;
+    @Column
+    @NotNull
+    @NotBlank
+    private String title;
 
-  @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.REMOVE)
-  @JoinColumn(name = "project_id")
-  private Project project;
+    @Column
+    @NotNull
+    private String subtitle;
 
-  @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.REMOVE)
-  @JoinColumn(name = "artifact_type_id")
-  private ArtifactType artifactType;
+    @Column
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    private ArtifactStatus status;
 
-  @OneToMany(mappedBy = "artifact")
-  private List<Img> imgList;
+    @Column
+    @NotNull
+    private LocalDate deadline;
 
-  @OneToMany(mappedBy = "artifact")
-  private List<Creator> creatorList;
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @JoinColumn(name = "project_id", updatable = false)
+    private Project project;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "artifact_type_id") // 변경 불가능하지 않을 수도
+    private ArtifactType artifactType;
+
+    @OneToMany(mappedBy = "artifact", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Img> imgList;
+
+    @OneToMany(mappedBy = "artifact", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ArtifactCreator> creatorList;
 }

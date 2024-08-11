@@ -1,52 +1,67 @@
 package com.vivace.opensw.entity;
 
+import com.vivace.opensw.model.ProjectStatus;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
-@Builder//빌더패턴으로 객체 생성을 위해서
+@AllArgsConstructor
+@Builder
 public class Project {
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name="id",updatable = false)
-  private Long id;
-  @Column(name="title",nullable = false)
-  private String title;
-  @Column
-  private String team_name;
-  @Column
-  private String description;
-  @Column
-  private Date deadline;
-  @Column
-  private int iterationLen;
-  @Column
-  private String status;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(updatable = false)
+    private Long id;
 
-  @OneToMany(mappedBy = "project")
-  private List<Participate> participateList;
+    @Column
+    @NotNull
+    @NotBlank
+    private String title;
 
-  @OneToMany(mappedBy = "project")
-  private List<ToDo> toDoList;
+    @Column
+    @NotNull
+    private String teamName;
 
-  @OneToMany(mappedBy = "project")
-  private List<Issue> issueList;
+    @Column
+    @NotNull
+    private String description;
 
-  @OneToMany(mappedBy = "project")
-  private List<Invite> inviteList;
+    @Column
+    @NotNull
+    private LocalDate deadline;
 
-  @OneToMany(mappedBy = "project")
-  private List<Artifact> artifactList;
+    @Column
+    @NotNull
+    private int iterationLen;
 
-  @OneToMany(mappedBy = "project")
-  private List<NecessaryArtifactType> necessaryArtifactTypeList;
+    @Column
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    private ProjectStatus projectStatus;
 
+    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Participate> participateList;
 
+    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ToDo> toDoList;
 
+    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Issue> issueList;
+
+    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Invite> inviteList;
+
+    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Artifact> artifactList;
+
+    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<NecessaryArtifactType> necessaryArtifactTypeList;
 }
