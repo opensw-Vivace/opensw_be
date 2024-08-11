@@ -56,7 +56,7 @@ public class Project {
     private List<Issue> issueList;
 
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Invite> inviteList;
+    private List<Invitation> invitationList;
 
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Artifact> artifactList;
@@ -76,7 +76,7 @@ public class Project {
         this.participateList = new ArrayList<>();
         this.toDoList = new ArrayList<>();
         this.issueList = new ArrayList<>();
-        this.inviteList = new ArrayList<>();
+        this.invitationList = new ArrayList<>();
         this.artifactList = new ArrayList<>();
         this.necessaryArtifactTypeList = new ArrayList<>();
     }
