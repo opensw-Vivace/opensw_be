@@ -1,12 +1,11 @@
 package com.vivace.opensw.controller;
 
 import com.vivace.opensw.service.ProjectService;
-import com.vivace.opensw.dto.ProjectListView;
+import com.vivace.opensw.dto.project.ProjectListViewResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 @RequiredArgsConstructor
@@ -16,9 +15,9 @@ public class HomeViewController {
 
   @GetMapping("/projects")
   public String getProjects(Model model){
-    List<ProjectListView> projects=projectService.findAll()
+    List<ProjectListViewResponseDto> projects=projectService.findAll()
         .stream()
-        .map(ProjectListView::new)
+        .map(ProjectListViewResponseDto::new)
         .toList();
     model.addAttribute("projects",projects);
     return "projectList";

@@ -1,7 +1,7 @@
 package com.vivace.opensw.controller;
 
 import com.vivace.opensw.service.ProjectService;
-import com.vivace.opensw.dto.AddProject;
+import com.vivace.opensw.dto.project.ProjectAddRequestDto;
 import com.vivace.opensw.entity.Project;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -15,7 +15,7 @@ public class HomeController {
   private final ProjectService projectService;
 
   @PostMapping("/api/projects")//api/projects를 addproject와 매핑
-  public ResponseEntity<Project> addProject(@RequestBody AddProject addProject){
+  public ResponseEntity<Project> addProject(@RequestBody ProjectAddRequestDto addProject){
     Project savedProject= projectService.save(addProject);
     return ResponseEntity.status(HttpStatus.CREATED)
         .body(savedProject);
