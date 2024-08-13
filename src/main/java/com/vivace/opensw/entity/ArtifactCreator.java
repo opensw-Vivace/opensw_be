@@ -7,7 +7,7 @@ import org.hibernate.annotations.ColumnDefault;
 
 @Entity
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class ArtifactCreator extends BaseEntity {
@@ -25,7 +25,9 @@ public class ArtifactCreator extends BaseEntity {
     @JoinColumn(name = "member_id", updatable = false)
     private Member member;
 
+    @Setter //artifact service.save 참고
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @JoinColumn(name = "artifact_id", updatable = false)
     private Artifact artifact;
+
 }

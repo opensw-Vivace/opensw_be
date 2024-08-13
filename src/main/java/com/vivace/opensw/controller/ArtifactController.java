@@ -1,6 +1,6 @@
 package com.vivace.opensw.controller;
 
-import com.vivace.opensw.dto.project.ArtifactDto;
+import com.vivace.opensw.dto.artifact.ArtifactPostDto;
 import com.vivace.opensw.service.ArtifactService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -18,7 +18,7 @@ public class ArtifactController {
      * 산출물 작성해서 db에 저장
      */
     @PostMapping("/artifacts")
-    public void save(@RequestBody ArtifactDto artifactDto){
-        artifactService.save(artifactDto);
+    public void save(@RequestBody ArtifactPostDto artifactPostDto){
+        artifactService.save(artifactPostDto);
     }
 }
