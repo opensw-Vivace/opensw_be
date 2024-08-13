@@ -44,7 +44,7 @@ public class Project {
     @Column
     @NotNull
     @Enumerated(EnumType.STRING)
-    private ProjectStatus projectStatus;
+    private ProjectStatus status;
 
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Participate> participateList;
@@ -72,7 +72,7 @@ public class Project {
         this.description = description;
         this.deadline = deadline;
         this.iterationLen = iterationLen;
-        this.projectStatus = ProjectStatus.IN_PROGRESS;
+        this.status = ProjectStatus.IN_PROGRESS;
         this.participateList = new ArrayList<>();
         this.toDoList = new ArrayList<>();
         this.issueList = new ArrayList<>();

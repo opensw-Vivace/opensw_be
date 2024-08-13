@@ -15,13 +15,11 @@ public class HomeViewController {
 
   @GetMapping("/projects")
   public String getProjects(Model model){
-//    List<ProjectListViewResponseDto> projects=projectService.findAll()
-//        .stream()
-//        .map(ProjectListViewResponseDto::new)
-//        .toList();
-//    model.addAttribute("projects",projects);
+    List<ProjectListViewResponseDto> projects=projectService.findAll()
+        .stream()
+        .map(ProjectListViewResponseDto::from)
+        .toList();
+    model.addAttribute("projects",projects);
     return "projectList";
   }
-
-
 }
