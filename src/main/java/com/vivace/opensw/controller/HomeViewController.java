@@ -17,7 +17,7 @@ public class HomeViewController {
   public String getProjects(Model model){
     List<ProjectListViewResponseDto> projects=projectService.findAll()
         .stream()
-        .map(ProjectListViewResponseDto::new)
+        .map(ProjectListViewResponseDto::from)
         .toList();
     model.addAttribute("projects",projects);
     return "projectList";
