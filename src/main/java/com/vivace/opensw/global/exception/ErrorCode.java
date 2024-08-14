@@ -19,10 +19,9 @@ public enum ErrorCode {
     INVALID_INPUT_VALUE(400, "입력값이 잘못되었습니다."),
     MISSING_PARAMETER(400, "필수 파라미터가 누락되었습니다."),
     // 비밀번호, 비밀번호 확인이 서로 불일치
-    PASSWORD_MISMATCH(400, "confirmPassword:비밀번호가 일치하지 않습니다."),
+    PASSWORD_MISMATCH(400, "confirmPw:비밀번호가 일치하지 않습니다."),
     // enum 값이 잘못됨
     INVALID_ENUM_VALUE(400, "enum 값이 잘못되었습니다."),
-    // 자신과 관련해 불가능한 요청
 
     // 401 Unauthorized
     // 로그인 상태여야 하는 요청
@@ -37,10 +36,6 @@ public enum ErrorCode {
     EXPIRED_ACCESS_TOKEN(401,"만료된 액세스 토큰입니다."),
     // 탈퇴한 회원
     MEMBER_STATUS_DELETED(401, "탈퇴한 회원입니다."),
-    // 어세스 토큰이 만료되지 않은 상황에서 재발급받으려는 경우
-    ACCESS_TOKEN_NOT_EXPIRED(401,"액세스 토큰이 아직 만료되지 않았습니다."),
-    // 쿠키에 리프레시 토큰이 들어있지 않은 경우
-    NO_COOKIE(401, "쿠키에 값이 존재하지 않습니다."),
 
     // 404 Not Found
     // 각 리소스를 찾지 못함
@@ -52,7 +47,6 @@ public enum ErrorCode {
 
     // 500 Internal Server Error
     // 외부 API 사용 도중 에러
-    REDIS_CONNECTION_ERROR(500, "서버에서 Redis 연결 중 문제가 발생했습니다."),
     EXTERNAL_API_ERROR(500, "외부 API 사용 중 문제가 발생했습니다."),
 
     ;
