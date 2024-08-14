@@ -1,12 +1,13 @@
 package com.vivace.opensw.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -24,11 +25,18 @@ public class ToDo extends  BaseEntity {
   private String status;
   @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.REMOVE)
   @JoinColumn(name="project_id")
+  @JsonBackReference//순환참조를 막기 위해서 넣어둠
   private Project project;
 
 
   @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.REMOVE)
   @JoinColumn(name="member_id")
   private Member member;
+  public void update(String title,String content,String status){
+    this.title=title;
+    this.content=content;
+    this.status=status;
+  }
+
 
 }

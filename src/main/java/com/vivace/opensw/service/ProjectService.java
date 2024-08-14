@@ -34,6 +34,7 @@ public class ProjectService {
     projectRepository.deleteById(id);
   }
   public List<Participate> getProjectParticipants(Long id){
+    //매개변수 프로젝트 아이디
     Project project=findById(id);
     if(project!=null){
       return project.getParticipateList();
