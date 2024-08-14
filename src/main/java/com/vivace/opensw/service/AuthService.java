@@ -53,7 +53,7 @@ public class AuthService {
         try {
             log.info("authenticationManager 시작");
             Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(requestDto.email(), requestDto.password(), Collections.emptyList())
+                    new UsernamePasswordAuthenticationToken(requestDto.email(), requestDto.pw(), Collections.emptyList())
             );
             log.info("authenticationManager 완료");
             return jwtUtil.generateAccessToken(authentication);
