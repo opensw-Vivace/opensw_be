@@ -1,6 +1,7 @@
 package com.vivace.opensw.service;
 
 import com.vivace.opensw.dto.project.ProjectAddRequestDto;
+import com.vivace.opensw.entity.Participate;
 import com.vivace.opensw.entity.Project;
 import com.vivace.opensw.repository.ProjectRepository;
 import lombok.RequiredArgsConstructor;

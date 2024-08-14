@@ -40,4 +40,9 @@ public class ToDo extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @JoinColumn(name = "member_id")
     private Member member;
+    public void update(String title,String content,DocsStatus status){
+        this.title=title;
+        this.content=content;
+        this.status=status;
+    }
 }

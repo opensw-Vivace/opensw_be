@@ -2,6 +2,7 @@ package com.vivace.opensw.dto;
 
 import com.vivace.opensw.entity.Project;
 import com.vivace.opensw.entity.ToDo;
+import com.vivace.opensw.model.DocsStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,7 +15,7 @@ import lombok.Setter;
 public class AddToDo {
   private String title;
   private String content;
-  private String status;
+  private DocsStatus status;
   private Long id;
   private Long ProjectId;
   public ToDo toEntity(Project project){
