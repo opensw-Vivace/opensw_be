@@ -6,6 +6,7 @@ import com.vivace.opensw.dto.member.request.SignUpRequestDto;
 import com.vivace.opensw.service.AuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +17,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 public class AuthController {
+    @Value("${jwt.header}")
+    private String jwtHeader;
+
     private final AuthService authService;
 
     @PostMapping("/signup")
@@ -28,7 +32,7 @@ public class AuthController {
     public ResponseEntity<?> login(@Valid @RequestBody LoginRequestDto requestDto){
         String accessToken = authService.login(requestDto);
         HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization", "Bearer " + accessToken);
+        headers.set(jwtHeader, "Bearer " + accessToken);
         return ResponseEntity.ok().headers(headers).build();
     }
 }

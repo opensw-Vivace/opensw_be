@@ -20,17 +20,18 @@ import java.util.Date;
 @Component
 @RequiredArgsConstructor
 public class JwtUtil {
-    @Value("${jwt.secret.access}")
-    private String key;
+    @Value("${jwt.secret}")
+    private String jwtSecret;
     private SecretKey accessKey;
+
     private static final Duration ACCESS_TOKEN_EXPIRE_TIME = Duration.ofDays(1);
+
     private final CustomUserDetailsService customUserDetailsService;
     private final JwtService jwtService;
 
-
     @PostConstruct
     private void setSecretKey() {
-        accessKey = Keys.hmacShaKeyFor(key.getBytes());
+        accessKey = Keys.hmacShaKeyFor(jwtSecret.getBytes());
     }
 
     public String generateAccessToken(Authentication authentication){
