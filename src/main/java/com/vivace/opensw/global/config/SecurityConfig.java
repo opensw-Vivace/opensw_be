@@ -1,9 +1,7 @@
 package com.vivace.opensw.global.config;
 
-//import com.vivace.opensw.global.auth.JwtAuthenticationEntryPoint;
 import com.vivace.opensw.global.auth.JwtAuthenticationFilter;
 import com.vivace.opensw.global.auth.JwtExceptionFilter;
-import com.vivace.opensw.global.auth.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

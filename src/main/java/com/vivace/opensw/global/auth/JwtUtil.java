@@ -10,11 +10,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
 import java.time.Duration;
+import java.util.Collections;
 import java.util.Date;
 
 @Component
@@ -23,8 +23,9 @@ public class JwtUtil {
     @Value("${jwt.secret.access}")
     private String key;
     private SecretKey accessKey;
-    private final JwtService jwtService;
     private static final Duration ACCESS_TOKEN_EXPIRE_TIME = Duration.ofDays(1);
+    private final CustomUserDetailsService customUserDetailsService;
+    private final JwtService jwtService;
 
 
     @PostConstruct
@@ -33,7 +34,7 @@ public class JwtUtil {
     }
 
     public String generateAccessToken(Authentication authentication){
-        Member member = jwtService.loadMemberByEmail(authentication.getName());
+        Member member = customUserDetailsService.loadMemberByEmail(authentication.getName());
         String currentToken = member.getAccessToken();
         if (currentToken != null && validateAccessToken(currentToken)) {
             // 액세스 토큰이 있으며 유효할 경우에는 accessToken을 바꾸지 않음
@@ -75,13 +76,11 @@ public class JwtUtil {
                     .setSigningKey(accessKey)
                     .build().parseClaimsJws(token)
                     .getBody().getSubject();
-            UserDetails userDetails = new CustomUserDetails(jwtService.loadMemberByEmail(userPrincipal));
-            return new UsernamePasswordAuthenticationToken(userDetails,"",userDetails.getAuthorities());
+            return new UsernamePasswordAuthenticationToken(userPrincipal, "", Collections.emptyList());
         } catch (SecurityException | MalformedJwtException | UnsupportedJwtException | IllegalArgumentException e){
             throw new CustomException(ErrorCode.INVALID_TOKEN);
         } catch (ExpiredJwtException e){
             throw new CustomException(ErrorCode.EXPIRED_ACCESS_TOKEN);
         }
     }
-
 }
