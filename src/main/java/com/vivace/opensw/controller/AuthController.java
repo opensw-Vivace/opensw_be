@@ -4,7 +4,6 @@ package com.vivace.opensw.controller;
 import com.vivace.opensw.dto.member.request.LoginRequestDto;
 import com.vivace.opensw.dto.member.request.SignUpRequestDto;
 import com.vivace.opensw.service.AuthService;
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;

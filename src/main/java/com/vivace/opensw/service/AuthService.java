@@ -23,10 +23,10 @@ import java.util.Optional;
 @Transactional
 @RequiredArgsConstructor
 public class AuthService {
-    private final MemberService memberService;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final JwtUtil jwtUtil;
+    private final MemberService memberService;
 
     public void signUp(SignUpRequestDto requestDto) {
         if (!requestDto.pw().equals(requestDto.confirmPw())) {
@@ -47,16 +47,13 @@ public class AuthService {
     }
 
     public String login(LoginRequestDto requestDto){
-        try{
+        try {
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
                             requestDto.email(), requestDto.password()
                     )
             );
-            Member member = memberService.getActiveMemberByEmail(authentication.getName());
-            String accessToken = jwtUtil.generateAccessToken(authentication);
-            memberService.updateAccessToken(member, accessToken);
-            return accessToken;
+            return jwtUtil.generateAccessToken(authentication);
         } catch (BadCredentialsException e){
             throw new CustomException(ErrorCode.LOGIN_FAIL);
         }
@@ -65,5 +62,4 @@ public class AuthService {
     public String encodePassword(String password){
         return passwordEncoder.encode(password);
     }
-
 }

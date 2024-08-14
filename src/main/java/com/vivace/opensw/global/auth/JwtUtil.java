@@ -1,7 +1,6 @@
 package com.vivace.opensw.global.auth;
 
 import com.vivace.opensw.entity.Member;
-import com.vivace.opensw.service.MemberService;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import com.vivace.opensw.global.exception.CustomException;
@@ -24,8 +23,9 @@ public class JwtUtil {
     @Value("${jwt.secret.access}")
     private String key;
     private SecretKey accessKey;
+    private final JwtService jwtService;
     private static final Duration ACCESS_TOKEN_EXPIRE_TIME = Duration.ofDays(1);
-    private final MemberService memberService;
+
 
     @PostConstruct
     private void setSecretKey() {
@@ -33,14 +33,14 @@ public class JwtUtil {
     }
 
     public String generateAccessToken(Authentication authentication){
-        Member member = memberService.getActiveMemberByEmail(authentication.getName());
+        Member member = jwtService.loadMemberByEmail(authentication.getName());
         String currentToken = member.getAccessToken();
         if (currentToken != null && validateAccessToken(currentToken)) {
             // 액세스 토큰이 있으며 유효할 경우에는 accessToken을 바꾸지 않음
             return currentToken;
         }
         String newAccessToken = generateToken(authentication);
-        memberService.updateAccessToken(member, newAccessToken);
+        jwtService.updateAccessToken(member, newAccessToken);
         return newAccessToken;
     }
 
@@ -75,7 +75,7 @@ public class JwtUtil {
                     .setSigningKey(accessKey)
                     .build().parseClaimsJws(token)
                     .getBody().getSubject();
-            UserDetails userDetails = new CustomUserDetails(memberService.getActiveMemberByEmail(userPrincipal));
+            UserDetails userDetails = new CustomUserDetails(jwtService.loadMemberByEmail(userPrincipal));
             return new UsernamePasswordAuthenticationToken(userDetails,"",userDetails.getAuthorities());
         } catch (SecurityException | MalformedJwtException | UnsupportedJwtException | IllegalArgumentException e){
             throw new CustomException(ErrorCode.INVALID_TOKEN);

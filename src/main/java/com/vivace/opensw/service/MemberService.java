@@ -58,9 +58,4 @@ public class MemberService {
     public void saveMember(Member member) {
         memberRepository.save(member);
     }
-
-    public void updateAccessToken(Member member, String accessToken) {
-        member.updateAccessToken(accessToken);
-        saveMember(member);
-    }
 }
