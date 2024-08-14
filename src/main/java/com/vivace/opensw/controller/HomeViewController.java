@@ -22,6 +22,4 @@ public class HomeViewController {
     model.addAttribute("projects",projects);
     return "projectList";
   }
-
-
 }

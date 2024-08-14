@@ -6,15 +6,16 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDate;
 import java.util.List;
 
 @Entity
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@SuperBuilder
 public class Artifact extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -50,6 +51,6 @@ public class Artifact extends BaseEntity {
     @OneToMany(mappedBy = "artifact", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Img> imgList;
 
-    @OneToMany(mappedBy = "artifact", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "artifact", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<ArtifactCreator> creatorList;
 }
