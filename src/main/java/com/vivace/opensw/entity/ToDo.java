@@ -1,5 +1,6 @@
 package com.vivace.opensw.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.vivace.opensw.global.BaseEntity;
 import com.vivace.opensw.model.DocsStatus;
 import jakarta.persistence.*;
@@ -35,9 +36,15 @@ public class ToDo extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @JoinColumn(name = "project_id")
+    @JsonIgnore
     private Project project;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @JoinColumn(name = "member_id")
     private Member member;
+    public void update(String title,String content,DocsStatus status){
+        this.title=title;
+        this.content=content;
+        this.status=status;
+    }
 }
