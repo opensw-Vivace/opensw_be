@@ -9,7 +9,6 @@ import com.vivace.opensw.global.exception.CustomException;
 import com.vivace.opensw.global.exception.ErrorCode;
 import com.vivace.opensw.model.MemberStatus;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -21,7 +20,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Collections;
 import java.util.Optional;
 
-@Slf4j
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -51,11 +49,9 @@ public class AuthService {
 
     public String login(LoginRequestDto requestDto){
         try {
-            log.info("authenticationManager 시작");
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(requestDto.email(), requestDto.pw(), Collections.emptyList())
             );
-            log.info("authenticationManager 완료");
             return jwtUtil.generateAccessToken(authentication);
         } catch (BadCredentialsException e){
             throw new CustomException(ErrorCode.LOGIN_FAIL);
