@@ -16,14 +16,12 @@ public class AddToDo {
   private String title;
   private String content;
   private DocsStatus status;
-  private Long id;
-  private Long ProjectId;
+  private Long projectId;
   public ToDo toEntity(Project project){
     return ToDo.builder().
         title(title)
         .content(content)
         .status(status)
-        .id(id)
         .project(project)
         .build();
   }

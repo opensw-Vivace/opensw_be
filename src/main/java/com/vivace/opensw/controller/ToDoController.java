@@ -18,6 +18,7 @@ public class ToDoController {
   @PostMapping("/projects/{projectId}/todos")
   public ResponseEntity<ToDo> addToDo(@RequestBody AddToDo addToDo, @PathVariable("projectId") Long id){
     addToDo.setProjectId(id);
+
     ToDo toDo=toDoService.save(addToDo);
     return ResponseEntity.status(HttpStatus.CREATED)
         .body(toDo);
