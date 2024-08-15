@@ -48,9 +48,18 @@ public class Artifact extends BaseEntity {
     @JoinColumn(name = "artifact_type_id") // 변경 불가능하지 않을 수도
     private ArtifactType artifactType;
 
+
     @OneToMany(mappedBy = "artifact", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Img> imgList;
 
     @OneToMany(mappedBy = "artifact", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<ArtifactCreator> creatorList;
+
+    public void updateImgList(List<Img> imgList){
+        this.imgList=imgList;
+    }
+
+    public void updateCreatorList(List<ArtifactCreator> creatorList){
+        this.creatorList=creatorList;
+    }
 }

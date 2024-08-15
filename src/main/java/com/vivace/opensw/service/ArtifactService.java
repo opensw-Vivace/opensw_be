@@ -1,6 +1,7 @@
 package com.vivace.opensw.service;
 
-import com.vivace.opensw.dto.artifact.ArtifactPostDto;
+import com.vivace.opensw.dto.artifact.ArtifactReqDto;
+import com.vivace.opensw.dto.artifact.ArtifactResDto;
 import com.vivace.opensw.entity.Artifact;
 import com.vivace.opensw.entity.ArtifactCreator;
 import com.vivace.opensw.entity.Img;
@@ -28,15 +29,15 @@ public class ArtifactService {
      * 산출물 생성해서 db에 저장.
      * 테스트 완료
      */
-    public void save(ArtifactPostDto artifactPostDto){
+    public void save(ArtifactReqDto artifactReqDto){
         List<Img> imgList=new ArrayList<>();
         List<ArtifactCreator> creatorList=new ArrayList<>();
         ArtifactCreator artifactCreator;
         Artifact artifact;
-        for(String imgPath : artifactPostDto.getImgPathList()){
-            imgList.add(imgRepository.findByImgPath(imgPath).get());
-        }
-        for(Long writerId: artifactPostDto.getWriterIdList()){
+
+
+
+        for(Long writerId: artifactReqDto.getWriterIdList()){
             artifactCreator=new ArtifactCreator().builder()
                     .member(memberRepository.findById(writerId).get())
                     .build();
@@ -51,23 +52,55 @@ public class ArtifactService {
         }
 
         artifact=new Artifact().builder()
-                .title(artifactPostDto.getTitle())
-                .subtitle(artifactPostDto.getSubtitle())
-                .status(artifactPostDto.getStatus())
-                .deadline(artifactPostDto.getDeadline())
-                .project(projectRepository.findById(artifactPostDto.getProjectId()).get())
-                .artifactType(artifactTypeRepository.findById(artifactPostDto.getArtifactTypeId()).get())
-                .imgList(imgList)
+                .title(artifactReqDto.getTitle())
+                .subtitle(artifactReqDto.getSubtitle())
+                .status(artifactReqDto.getStatus())
+                .deadline(artifactReqDto.getDeadline())
+                .project(projectRepository.findById(artifactReqDto.getProjectId()).get())
+                .artifactType(artifactTypeRepository.findById(artifactReqDto.getArtifactTypeId()).get())
                 .creatorList(creatorList)
                 .status(ArtifactStatus.NOT_STARTED)
                 .build();
 
+        for(String imgPath : artifactReqDto.getImgPathList()){
+            imgList.add(new Img().builder().imgPath(imgPath).artifact(artifact).build());
+        }
+
+        artifact.updateImgList(imgList);
         artifactRepository.save(artifact);
 
         for(ArtifactCreator creator:creatorList){
             creator.setArtifact(artifact);
             creatorRepository.save(creator);
         }
+    }
+
+
+
+    /**
+     * 특정 프로젝트에 속한 산출물들을 리턴해줌.
+     */
+    public List<ArtifactResDto> findByProjectId(Long projectId){
+        List<ArtifactResDto> artifactResDtoList=new ArrayList<>();
+        List<Artifact> artifactList=artifactRepository.findByProjectId(projectId).get(); //검증 필요
+        ArtifactResDto artifactResDto;
+        for(Artifact artifact:artifactList){
+            artifactResDto=new ArtifactResDto().builder()
+                    .id(artifact.getId())
+                    .title(artifact.getTitle())
+                    .subtitle(artifact.getSubtitle())
+                    .status(artifact.getStatus())
+                    .deadline(artifact.getDeadline())
+                    .projectId(artifact.getProject().getId())
+                    .artifactTypeId(artifact.getArtifactType().getId())
+                    .imgPathList(artifact.getImgList().stream().map(Img::getImgPath).toList())
+                    .artifactCreatorIdList(artifact.getCreatorList().stream().map(ArtifactCreator::getId).toList())
+                    .build();
+
+            artifactResDtoList.add(artifactResDto);
+        }
+
+        return artifactResDtoList;
     }
 
 
