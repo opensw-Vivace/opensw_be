@@ -39,4 +39,20 @@ public class Member extends BaseEntity {
     @NotNull
     @Enumerated(EnumType.STRING)
     private MemberStatus memberStatus;
+
+    @Column
+    private String accessToken;
+
+    @Builder
+    public Member(Long id, String email, String name, String pw) {
+        this.id = id;
+        this.email = email;
+        this.name = name;
+        this.pw = pw;
+        this.memberStatus = MemberStatus.ACTIVE;
+    }
+
+    public void updateAccessToken(String accessToken) {
+        this.accessToken = accessToken;
+    }
 }
