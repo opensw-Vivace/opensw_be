@@ -1,4 +1,4 @@
-package com.vivace.opensw.dto;
+package com.vivace.opensw.dto.todo;
 
 import com.vivace.opensw.entity.Project;
 import com.vivace.opensw.entity.ToDo;
