@@ -34,22 +34,16 @@ public class ProjectService {
     positionRepository.save(position);
     positionList.add(position);
   }
-
-
-
-
    Participate participate= Participate.builder().
        project(project).
        positionList(positionList)
        .build();
     participate = participateRepository.save(participate);
 
-
     project.getParticipateList().add(participate);
-
     return project;
-
   }
+
   public Project findById(Long id){
     return projectRepository.findById(id).orElseThrow(()->new IllegalArgumentException("not found: "+id));
   }
