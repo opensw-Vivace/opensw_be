@@ -3,6 +3,8 @@ package com.vivace.opensw.service;
 import com.vivace.opensw.dto.project.ProjectAddRequestDto;
 import com.vivace.opensw.entity.Participate;
 import com.vivace.opensw.entity.Project;
+import com.vivace.opensw.repository.ParticipateRepository;
+import com.vivace.opensw.repository.PositionRepository;
 import com.vivace.opensw.repository.ProjectRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,11 +17,12 @@ public class ProjectService {
 
 
   private final ProjectRepository projectRepository;
-
+  private final ParticipateRepository participateRepository;
+  private final PositionRepository positionRepository;
 
 
   public Project save(ProjectAddRequestDto addProject) {//생성시 프로젝트 저장
-     return projectRepository.save(addProject.toEntity(addProject));
+     return projectRepository.save(addProject.toEntity());
 
   }
   public Project findById(Long id){
