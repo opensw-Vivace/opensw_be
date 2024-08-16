@@ -75,9 +75,15 @@ public class ToDoService {
   }
   @Transactional
   public ToDo update(Long id, UpdateToDo updateToDo){
-    ToDo todo=toDoRepository.findById(id).orElseThrow(()->new IllegalArgumentException("not found"+id));
-    todo.update(updateToDo.getTitle(), updateToDo.getContent(), updateToDo.getStatus());
-    return todo;
+    Project project=projectRepository.findById(updateToDo.getProjectId())
+        .orElseThrow(()->new IllegalArgumentException("cannot find"));
+
+    Member member=memberRepository.findById(updateToDo.getMemberId())
+        .orElseThrow(()->new IllegalArgumentException("cannot find"));
+   ToDo todo=toDoRepository.findById(id).orElseThrow(()->new IllegalArgumentException());
+   todo.update(updateToDo.getTitle(), updateToDo.getContent(), updateToDo.getStatus());
+
+    return toDoRepository.save(todo);
   }
 
 }
