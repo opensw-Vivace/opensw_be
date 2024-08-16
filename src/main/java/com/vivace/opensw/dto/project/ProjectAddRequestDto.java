@@ -18,7 +18,7 @@ public class ProjectAddRequestDto {
     private String description;
     private int iterationLen;
     private Long memberId;  // 프로젝트를 생성한 사용자의 ID
-    private String positionName; // 사용자의 역할 (포지션 이름)
+    private List<String> positionName; // 사용자의 역할 (포지션 이름)
 
     public Project toEntity() {
         return Project.builder()

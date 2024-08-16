@@ -9,10 +9,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 @RequiredArgsConstructor
 @Service
@@ -30,13 +27,20 @@ public class ProjectService {
   @Transactional
   public Project save(ProjectAddRequestDto addProject) {//
    Project project=projectRepository.save(addProject.toEntity());
-   Position position=Position.builder().
-       position(addProject.getPositionName())
-       .build();
-   position=positionRepository.save(position);
+   List<Position> positionList=new ArrayList<>();
+  for(String positionName: addProject.getPositionName()){
+    Position position= Position.builder().position(positionName)
+        .build();
+    positionRepository.save(position);
+    positionList.add(position);
+  }
+
+
+
+
    Participate participate= Participate.builder().
        project(project).
-       positionList(Collections.singletonList(position))
+       positionList(positionList)
        .build();
     participate = participateRepository.save(participate);
 
@@ -44,8 +48,6 @@ public class ProjectService {
     project.getParticipateList().add(participate);
 
     return project;
-
-
 
   }
   public Project findById(Long id){
