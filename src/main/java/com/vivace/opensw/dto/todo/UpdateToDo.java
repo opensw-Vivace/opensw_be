@@ -11,7 +11,7 @@ import lombok.Setter;
 @Setter
 @Getter
 public class UpdateToDo {
-  private Long id;
+
   private String title;
   private String content;
   private DocsStatus status;
