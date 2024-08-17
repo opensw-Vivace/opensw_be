@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.*;
 
+import static com.vivace.opensw.model.Role.ROLE_OWNER;
+
 @RequiredArgsConstructor
 @Service
 public class ProjectService {
@@ -22,23 +24,27 @@ public class ProjectService {
   private final ImgRepository imgRepository;
   private final CreatorRepository creatorRepository;
   private final MemberRepository memberRepository;
+  private final MemberService memberService;
   private final ParticipateRepository participateRepository;
   private final PositionRepository positionRepository;
   @Transactional
   public Project save(ProjectAddRequestDto addProject) {//
    Project project=projectRepository.save(addProject.toEntity());
    List<Position> positionList=new ArrayList<>();
-  for(String positionName: addProject.getPositionName()){
-    Position position= Position.builder().position(positionName)
+    Participate participate= Participate.builder().
+        project(project).role(ROLE_OWNER)
         .build();
+    participate = participateRepository.save(participate);
+  for(String positionName: addProject.getPositionName()){
+    Position position= Position.builder().position(positionName).
+        member(memberService.getCurrentMember())
+        .participate(participate)
+        .build();
+
     positionRepository.save(position);
     positionList.add(position);
   }
-   Participate participate= Participate.builder().
-       project(project).
-       positionList(positionList)
-       .build();
-    participate = participateRepository.save(participate);
+    participate.updatePosition(positionList);
 
     project.getParticipateList().add(participate);
     return project;

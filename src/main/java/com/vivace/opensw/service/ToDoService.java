@@ -24,11 +24,12 @@ public class ToDoService {
   private final ToDoRepository toDoRepository;
   private final ProjectRepository projectRepository;
   private final MemberRepository memberRepository;
+  private final MemberService memberService;
   public ToDo save(AddToDo addToDo) {//생성시 프로젝트 저장
     Project project=projectRepository.findById(addToDo.getProjectId())
         .orElseThrow(()->new IllegalArgumentException("cannot find"));
 
-    Member member=memberRepository.findById(addToDo.getMemberId())
+    Member member=memberRepository.findById(memberService.getCurrentMember().getId())
         .orElseThrow(()->new IllegalArgumentException("cannot find"));
     ToDo todo=new ToDo().builder()
         .project(project)
