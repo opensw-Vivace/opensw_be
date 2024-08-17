@@ -45,7 +45,7 @@ public class ProjectController {
   @GetMapping("/projects/{projectId}")
   public ResponseEntity<ProjectListViewResponseDto> getProject(@PathVariable("projectId") Long id){
     Project project=projectService.findById(id);
-    ProjectListViewResponseDto projectDto= ProjectListViewResponseDto.from(project);
+    ProjectListViewResponseDto projectDto=ProjectListViewResponseDto.from(project);
     return ResponseEntity.status(HttpStatus.CREATED)
         .body(projectDto);
   }

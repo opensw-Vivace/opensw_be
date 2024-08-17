@@ -32,6 +32,9 @@ public class ToDoService {
     Member member=memberRepository.findById(memberService.getCurrentMember().getId())
         .orElseThrow(()->new IllegalArgumentException("cannot find"));
     ToDo todo=new ToDo().builder()
+        .title(addToDo.getTitle())
+        .content(addToDo.getContent())
+        .status(addToDo.getStatus())
         .project(project)
         .member(member)
         .build();
@@ -78,7 +81,7 @@ public class ToDoService {
   public ToDo update(Long id, UpdateToDo updateToDo){
     ToDo todo=toDoRepository.findById(id).orElseThrow(()->new IllegalArgumentException("not found"+id));
     todo.update(updateToDo.getTitle(), updateToDo.getContent(), updateToDo.getStatus());
-    return todo;
+    return toDoRepository.save(todo);
   }
 
 }
