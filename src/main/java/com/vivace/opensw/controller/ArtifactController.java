@@ -35,4 +35,13 @@ public class ArtifactController {
         List<ArtifactResDto> artifactResDtoList= artifactService.findByProjectId(projectId);
         return ResponseEntity.status(HttpStatus.OK).body(artifactResDtoList);
     }
+
+    /**
+     * 특정 산출물의 상태 변경
+     */
+    @PatchMapping("/artifacts/{artifactId}/status")
+    public ResponseEntity<Boolean> updateStatus(@PathVariable Long artifactId, @RequestParam String status){
+        Boolean result=artifactService.updateStatus(artifactId, status);
+        return ResponseEntity.status(HttpStatus.OK).body(result); //상태코드 update시에는 어떻게?
+    }
 }
