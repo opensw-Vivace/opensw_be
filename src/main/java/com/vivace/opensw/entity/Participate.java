@@ -35,4 +35,5 @@ public class Participate extends BaseEntity {
     public void updatePosition(List<Position> positionList){
         this.positionList=positionList;
     }
+
 }
