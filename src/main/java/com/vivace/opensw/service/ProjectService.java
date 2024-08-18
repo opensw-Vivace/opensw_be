@@ -2,26 +2,54 @@ package com.vivace.opensw.service;
 
 import com.vivace.opensw.dto.project.ProjectAddRequestDto;
 import com.vivace.opensw.entity.Participate;
+import com.vivace.opensw.entity.Position;
 import com.vivace.opensw.entity.Project;
-import com.vivace.opensw.repository.ProjectRepository;
+import com.vivace.opensw.repository.*;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.*;
+
+import static com.vivace.opensw.model.Role.ROLE_OWNER;
 
 @RequiredArgsConstructor
 @Service
 public class ProjectService {
 
 
+  private final ArtifactRepository artifactRepository;
   private final ProjectRepository projectRepository;
+  private final ArtifactTypeRepository artifactTypeRepository;
+  private final ImgRepository imgRepository;
+  private final CreatorRepository creatorRepository;
+  private final MemberRepository memberRepository;
+  private final MemberService memberService;
+  private final ParticipateRepository participateRepository;
+  private final PositionRepository positionRepository;
+  @Transactional
+  public Project save(ProjectAddRequestDto addProject) {//
+   Project project=projectRepository.save(addProject.toEntity());
+   List<Position> positionList=new ArrayList<>();
+    Participate participate= Participate.builder().
+        project(project).role(ROLE_OWNER)
+        .build();
+    participate = participateRepository.save(participate);
+  for(String positionName: addProject.getPositionName()){
+    Position position= Position.builder().position(positionName).
+        member(memberService.getCurrentMember())
+        .participate(participate)
+        .build();
 
-
-
-  public Project save(ProjectAddRequestDto addProject) {//생성시 프로젝트 저장
-     return projectRepository.save(addProject.toEntity(addProject));
-
+    positionRepository.save(position);
+    positionList.add(position);
   }
+    participate.updatePosition(positionList);
+
+    project.getParticipateList().add(participate);
+    return project;
+  }
+
   public Project findById(Long id){
     return projectRepository.findById(id).orElseThrow(()->new IllegalArgumentException("not found: "+id));
   }

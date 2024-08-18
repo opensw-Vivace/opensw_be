@@ -2,22 +2,18 @@ package com.vivace.opensw.dto.todo;
 
 import com.vivace.opensw.entity.ToDo;
 import com.vivace.opensw.model.DocsStatus;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 
-public record ToDoList(
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
+@Builder
+public class ToDoList{
+  private Long ProjectId;
+  private String title;
+  private String content;
+  private DocsStatus status;
 
-    Long ProjectId,
-    String title,
-    String content,
-    DocsStatus status
-
-) {
-  public static ToDoList from(ToDo todo){
-    return new ToDoList(
-
-        todo.getProject().getId(),
-        todo.getTitle(),
-        todo.getContent(),
-        todo.getStatus()
-    );
-  }
 }
