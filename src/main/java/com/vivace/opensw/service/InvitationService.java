@@ -2,14 +2,20 @@ package com.vivace.opensw.service;
 
 import com.vivace.opensw.dto.InvitationDto;
 import com.vivace.opensw.entity.Invitation;
+import com.vivace.opensw.entity.Participate;
+import com.vivace.opensw.global.exception.CustomException;
+import com.vivace.opensw.global.exception.ErrorCode;
+import com.vivace.opensw.model.Role;
 import com.vivace.opensw.repository.InvitationRepository;
 import com.vivace.opensw.repository.MemberRepository;
+import com.vivace.opensw.repository.ParticipateRepository;
 import com.vivace.opensw.repository.ProjectRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -20,7 +26,8 @@ public class InvitationService {
     private final ProjectRepository projectRepository;
 
     private final MemberRepository memberRepository;
-
+    private final InvitationRepository invitationRepository;
+    private final ParticipateRepository participateRepository;
     /**
      *  Invitation(초대장)에 관련된 crud 담당
      */
@@ -68,13 +75,23 @@ public class InvitationService {
     /**
      * 초대장 수락
      */
+    public void accept(Long id){
+        Invitation invitation=invitationRepository.findById(id)
+                .orElseThrow(()->new CustomException(ErrorCode.INVITATION_NOT_FOUND));
+
+        // Participate 테이블에 튜플 추가
+        Participate participate=new Participate().builder()
+                .role(Role.ROLE_MEMBER) //기본적으로 멤버로 추가
+                .project(invitation.getProject())
+                .
+    }
 
 
     /**
      * 초대장 삭제(거절)
      */
     public void deleteById(Long id){
-        InvitationRepository.deleteById(id);
+        invitationRepository.deleteById(id);
     }
 
 
