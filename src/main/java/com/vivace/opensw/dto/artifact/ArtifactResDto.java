@@ -36,5 +36,7 @@ public class ArtifactResDto {
 
     private List<String> imgPathList;
 
-    private List<Long> artifactCreatorIdList; //어떤 자료형으로 보낼 지 고민.
+    private List<Long> artifactCreatorIdList; //creator 엔티티 id
+
+    private List<Long> memberIdList; //멤버id
 }
