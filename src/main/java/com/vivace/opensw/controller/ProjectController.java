@@ -20,11 +20,10 @@ import java.util.List;
 public class ProjectController {
 
   private final ProjectService projectService;
-  private final MemberService memberService;
+
 
   @PostMapping("/projects")//projects를 addproject와 매핑
   public ResponseEntity<Project> addProject(@RequestBody ProjectAddRequestDto projectAddRequestDto){
-
     Project savedProject= projectService.save(projectAddRequestDto);
     return ResponseEntity.status(HttpStatus.CREATED)
         .body(savedProject);
