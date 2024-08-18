@@ -1,8 +1,9 @@
 package com.vivace.opensw.service;
 
-import com.vivace.opensw.dto.AddProject;
-import com.vivace.opensw.dto.AddToDo;
-import com.vivace.opensw.dto.UpdateToDo;
+
+import com.vivace.opensw.dto.todo.AddToDo;
+import com.vivace.opensw.dto.todo.UpdateToDo;
+import com.vivace.opensw.dto.todo.ToDoList;
 import com.vivace.opensw.entity.Project;
 import com.vivace.opensw.entity.ToDo;
 import com.vivace.opensw.repository.ProjectRepository;
@@ -12,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -25,8 +27,10 @@ public class ToDoService {
     return toDoRepository.save(todo);
 
   }
-  public ToDo findById(Long id){
-    return toDoRepository.findById(id).orElseThrow(()->new IllegalArgumentException("not found: "+id));
+  public List<ToDoList> getToDosByProjectId(Long projectId){
+    List<ToDo> todos=toDoRepository.findByProjectId(projectId);
+    return todos.stream().map(ToDoList::from)
+        .collect(Collectors.toList());
   }
 
   public List<ToDo> findAll(){
@@ -35,7 +39,7 @@ public class ToDoService {
   @Transactional
   public ToDo update(Long id, UpdateToDo updateToDo){
     ToDo todo=toDoRepository.findById(id).orElseThrow(()->new IllegalArgumentException("not found"+id));
-    todo.update(updateToDo.getTitle(), updateToDo.getContent(), updateToDo.getTitle());
+    todo.update(updateToDo.getTitle(), updateToDo.getContent(), updateToDo.getStatus());
     return todo;
   }
 

@@ -1,9 +1,11 @@
 package com.vivace.opensw.controller;
-import com.vivace.opensw.dto.ProjectListView;
+
+import com.vivace.opensw.dto.project.ProjectAddRequestDto;
+import com.vivace.opensw.dto.project.ProjectListViewResponseDto;
 import com.vivace.opensw.entity.Member;
 import com.vivace.opensw.entity.Participate;
 import com.vivace.opensw.service.ProjectService;
-import com.vivace.opensw.dto.AddProject;
+
 import com.vivace.opensw.entity.Project;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -19,18 +21,18 @@ public class ProjectController {
   private final ProjectService projectService;
 
   @PostMapping("/projects")//projects를 addproject와 매핑
-  public ResponseEntity<Project> addProject(@RequestBody AddProject addProject){
-    Project savedProject= projectService.save(addProject);
+  public ResponseEntity<Project> addProject(@RequestBody ProjectAddRequestDto projectAddRequestDto){
+    Project savedProject= projectService.save(projectAddRequestDto);
     return ResponseEntity.status(HttpStatus.CREATED)
         .body(savedProject);
 
   }
 
   @GetMapping("/projects")
-  public ResponseEntity<List<ProjectListView>> getProjects() {
-    List<ProjectListView> projects = projectService.findAll()
+  public ResponseEntity<List<ProjectListViewResponseDto>> getProjects() {
+    List<ProjectListViewResponseDto> projects = projectService.findAll()
         .stream()
-        .map(ProjectListView::new)
+        .map(ProjectListViewResponseDto::from)
         .toList();
 
     return ResponseEntity.status(HttpStatus.CREATED)
@@ -38,9 +40,9 @@ public class ProjectController {
   }
 
   @GetMapping("/projects/{projectId}")
-  public ResponseEntity<ProjectListView> getProject(@PathVariable("projectId") Long id){
+  public ResponseEntity<ProjectListViewResponseDto> getProject(@PathVariable("projectId") Long id){
     Project project=projectService.findById(id);
-    ProjectListView projectDto=new ProjectListView(project);
+    ProjectListViewResponseDto projectDto= ProjectListViewResponseDto.from(project);
     return ResponseEntity.status(HttpStatus.CREATED)
         .body(projectDto);
   }

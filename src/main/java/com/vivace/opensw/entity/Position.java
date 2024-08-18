@@ -1,28 +1,31 @@
 package com.vivace.opensw.entity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import lombok.*;
 
 @Entity
-@Setter
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
+@Builder
 public class Position {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(updatable = false)
     private Long id;
 
     @Column
+    @NotNull
+    @NotBlank
     private String position;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
+    @JoinColumn(name = "member_id", updatable = false)
     private Member member;
 
-    @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name = "participate_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "participate_id", updatable = false)
     private Participate participate;
-
-
 }
