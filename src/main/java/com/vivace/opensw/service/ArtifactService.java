@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -101,6 +102,26 @@ public class ArtifactService {
         }
 
         return artifactResDtoList;
+    }
+
+
+    /**
+     * 산출물의 상태 변경 메소드.
+     * 변경 성공 시 true, 실패 시 false 리턴.
+     */
+    public boolean updateStatus(Long artifactId, String status){
+        ArtifactStatus artifactStatus= Enum.valueOf(ArtifactStatus.class, status); //enum 타입으로 형변환
+        Optional<Artifact> artifactOptional=artifactRepository.findById(artifactId);
+
+        if(artifactOptional.isEmpty()) return false;
+        Artifact artifact=artifactOptional.get();
+        artifact.updateStatus(artifactStatus); //찾은 산출물의 상태 변경
+        artifactRepository.save(artifact); //변경해서 db에 저장
+        return artifactRepository.findById(artifactId).get().getStatus().equals(artifactStatus); //정상적으로 변경되었다면 true
+        /**
+         * return부분에서 db를 한번 더 조회해서 성능의 문제가 생길 수 있음.
+         * 느려진다면 삭제하거나, 다른 방안을 모색해야 할 듯.
+         */
     }
 
 
