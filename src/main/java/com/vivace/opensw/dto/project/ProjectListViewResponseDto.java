@@ -1,5 +1,6 @@
 package com.vivace.opensw.dto.project;
 
+import com.vivace.opensw.entity.Member;
 import com.vivace.opensw.entity.Project;
 
 import java.time.LocalDate;

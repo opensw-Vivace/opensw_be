@@ -1,5 +1,6 @@
 package com.vivace.opensw.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.vivace.opensw.global.BaseEntity;
 import com.vivace.opensw.model.Role;
 import jakarta.persistence.*;
@@ -26,8 +27,12 @@ public class Participate extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "project_id", updatable = false)
+    @JsonIgnore
     private Project project;
 
     @OneToMany(mappedBy = "participate", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Position> positionList;
+    public void updatePosition(List<Position> positionList){
+        this.positionList=positionList;
+    }
 }

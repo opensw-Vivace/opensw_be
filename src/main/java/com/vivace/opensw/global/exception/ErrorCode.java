@@ -40,7 +40,11 @@ public enum ErrorCode {
     // 404 Not Found
     // 각 리소스를 찾지 못함
     MEMBER_NOT_FOUND(404, "사용자를 찾을 수 없습니다."),
+<<<<<<< HEAD
     INVITATION_NOT_FOUND(404, "초대장을 찾을 수 없습니다."),
+=======
+    ARTIFACT_NOT_FOUND(404, "산출물을 찾을 수 없습니다."),
+>>>>>>> a327ecaf1cc20669a0e56c487123bce0b8b6ea82
 
     // 409 Conflict
     // 중복 리소스 생성 시도

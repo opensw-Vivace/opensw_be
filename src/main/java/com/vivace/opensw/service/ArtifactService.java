@@ -5,6 +5,9 @@ import com.vivace.opensw.dto.artifact.ArtifactResDto;
 import com.vivace.opensw.entity.Artifact;
 import com.vivace.opensw.entity.ArtifactCreator;
 import com.vivace.opensw.entity.Img;
+import com.vivace.opensw.entity.Member;
+import com.vivace.opensw.global.exception.CustomException;
+import com.vivace.opensw.global.exception.ErrorCode;
 import com.vivace.opensw.model.ArtifactStatus;
 import com.vivace.opensw.repository.*;
 import lombok.RequiredArgsConstructor;
@@ -86,17 +89,7 @@ public class ArtifactService {
         List<Artifact> artifactList=artifactRepository.findByProjectId(projectId).get(); //검증 필요
         ArtifactResDto artifactResDto;
         for(Artifact artifact:artifactList){
-            artifactResDto=new ArtifactResDto().builder()
-                    .id(artifact.getId())
-                    .title(artifact.getTitle())
-                    .subtitle(artifact.getSubtitle())
-                    .status(artifact.getStatus())
-                    .deadline(artifact.getDeadline())
-                    .projectId(artifact.getProject().getId())
-                    .artifactTypeId(artifact.getArtifactType().getId())
-                    .imgPathList(artifact.getImgList().stream().map(Img::getImgPath).toList())
-                    .artifactCreatorIdList(artifact.getCreatorList().stream().map(ArtifactCreator::getId).toList())
-                    .build();
+            artifactResDto=toResDto(artifact);
 
             artifactResDtoList.add(artifactResDto);
         }
@@ -123,6 +116,40 @@ public class ArtifactService {
          * 느려진다면 삭제하거나, 다른 방안을 모색해야 할 듯.
          */
     }
+
+    /**
+     * 산출물 상세정보
+     */
+    public ArtifactResDto getDetailsById(Long id){
+        Artifact artifact=artifactRepository.findById(id)
+                .orElseThrow(()->new CustomException(ErrorCode.ARTIFACT_NOT_FOUND));
+
+        return toResDto(artifact);
+    }
+
+
+    /**
+     * entity->resDto
+     */
+    public ArtifactResDto toResDto(Artifact artifact){
+        ArtifactResDto artifactResDto=new ArtifactResDto().builder()
+                .id(artifact.getId())
+                .title(artifact.getTitle())
+                .subtitle(artifact.getSubtitle())
+                .status(artifact.getStatus())
+                .deadline(artifact.getDeadline())
+                .projectId(artifact.getProject().getId())
+                .artifactTypeId(artifact.getArtifactType().getId())
+                .imgPathList(artifact.getImgList().stream().map(Img::getImgPath).toList())
+                .artifactCreatorIdList(artifact.getCreatorList().stream().map(ArtifactCreator::getId).toList()) //creator 엔티티의 id
+                .memberIdList(artifact.getCreatorList()
+                        .stream().map(ArtifactCreator::getMember).toList()
+                        .stream().map(Member::getId).toList()) //작성자의 id
+                .build();
+
+        return artifactResDto;
+    }
+
 
 
 }
