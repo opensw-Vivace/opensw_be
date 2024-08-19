@@ -30,7 +30,7 @@ public class ToDoService {
     Project project=projectRepository.findById(addToDo.getProjectId()).
         orElseThrow(()->new IllegalArgumentException("cannot found"));
 
-    Member member=memberRepository.findById()
+    Member member=memberRepository.findById(memberService.getCurrentMember().getId())
         .orElseThrow(()->new IllegalArgumentException("cannot find"));
     ToDo todo=new ToDo().builder()
         .project(project)
