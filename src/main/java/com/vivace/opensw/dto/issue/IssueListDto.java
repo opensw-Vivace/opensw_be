@@ -1,18 +1,16 @@
-package com.vivace.opensw.dto.todo;
+package com.vivace.opensw.dto.issue;
 
 import com.vivace.opensw.model.DocsStatus;
 import lombok.*;
 
 @NoArgsConstructor
 @AllArgsConstructor
-@Setter
 @Getter
+@Setter
 @Builder
-public class UpdateToDo {
-
+public class IssueListDto {
   private String title;
   private String content;
-  private DocsStatus status;
   private Long projectId;
-
+  private DocsStatus status;
 }

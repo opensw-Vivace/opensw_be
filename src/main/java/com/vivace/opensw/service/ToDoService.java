@@ -33,15 +33,30 @@ public class ToDoService {
     Member member=memberRepository.findById(memberService.getCurrentMember().getId())
         .orElseThrow(()->new IllegalArgumentException("cannot find"));
     ToDo todo=new ToDo().builder()
+        .title(addToDo.getTitle())
+        .content(addToDo.getContent())
+        .status(addToDo.getStatus())
         .project(project)
         .member(member)
         .build();
     return toDoRepository.save(todo);
   }
+  public ToDoList getToDoByTodoId(Long todoId){
+    ToDo toDo=toDoRepository.findById(todoId).orElseThrow(()->new IllegalArgumentException("there isn't todo"));
+    ToDoList toDoList;
+    toDoList=new ToDoList().builder()
+        .title(toDo.getTitle())
+        .content(toDo.getContent())
+        .status(toDo.getStatus())
+        .build();
+    return toDoList;
+  }
   public List<ToDoList> getToDosByProjectId(Long projectId){
    List<ToDo> toDoList=toDoRepository.findByProjectId(projectId).stream().toList();
    ToDoList todo;
    List<ToDoList> todoDtoList=new ArrayList<>();
+    Member member=memberRepository.findById(memberService.getCurrentMember().getId())
+        .orElseThrow(()->new IllegalArgumentException("cannot find"));
    for(ToDo Todo:toDoList){
       todo=new ToDoList().builder()
           .title(Todo.getTitle())
@@ -80,7 +95,7 @@ public class ToDoService {
     Project project=projectRepository.findById(updateToDo.getProjectId())
         .orElseThrow(()->new IllegalArgumentException("cannot find"));
 
-    Member member=memberRepository.findById(updateToDo.getMemberId())
+    Member member=memberRepository.findById(memberService.getCurrentMember().getId())
         .orElseThrow(()->new IllegalArgumentException("cannot find"));
    ToDo todo=toDoRepository.findById(id).orElseThrow(()->new IllegalArgumentException());
    todo.update(updateToDo.getTitle(), updateToDo.getContent(), updateToDo.getStatus());
