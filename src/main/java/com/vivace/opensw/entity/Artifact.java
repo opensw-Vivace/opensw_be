@@ -62,4 +62,8 @@ public class Artifact extends BaseEntity {
     public void updateCreatorList(List<ArtifactCreator> creatorList){
         this.creatorList=creatorList;
     }
+
+    public void updateStatus(ArtifactStatus artifactStatus){
+        this.status=artifactStatus;
+    }
 }

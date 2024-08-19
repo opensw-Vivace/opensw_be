@@ -22,10 +22,9 @@ public class InvitationController {
      * 발송 되었는데 500에러. responseEntity설정 해야할 듯
      */
     @PostMapping("/invitations")
-    public void send(@RequestBody InvitationDto InvitationDto){
+    public ResponseEntity send(@RequestBody InvitationDto InvitationDto){
         InvitationService.send(InvitationDto);
-        System.out.println(InvitationDto.toString());
-        System.out.println("hello");
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     /**
@@ -41,8 +40,10 @@ public class InvitationController {
      * 404 not found 떴는데 삭제됨. 왜??
      */
     @DeleteMapping("/invitations/{invitationId}")
-    public void reject(@PathVariable Long invitationId){
+    public ResponseEntity reject(@PathVariable Long invitationId){
+
         InvitationService.deleteById(invitationId);
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 
 

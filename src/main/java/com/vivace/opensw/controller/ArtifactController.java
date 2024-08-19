@@ -3,6 +3,7 @@ package com.vivace.opensw.controller;
 import com.vivace.opensw.dto.artifact.ArtifactReqDto;
 import com.vivace.opensw.dto.artifact.ArtifactResDto;
 import com.vivace.opensw.service.ArtifactService;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,10 +30,30 @@ public class ArtifactController {
 
     /**
      * 프로젝트 내 모든 산출물 조회
+     * 모든 상세정보를 넘길 필요는 없는 걸까?
      */
     @GetMapping("/projects/{projectId}/artifacts")
     public ResponseEntity<List<ArtifactResDto>> findByProjectId(@PathVariable Long projectId){
         List<ArtifactResDto> artifactResDtoList= artifactService.findByProjectId(projectId);
         return ResponseEntity.status(HttpStatus.OK).body(artifactResDtoList);
     }
+
+    /**
+     * 특정 산출물의 상태 변경
+     */
+    @PatchMapping("/artifacts/{artifactId}/status")
+    public ResponseEntity<Boolean> updateStatus(@PathVariable Long artifactId, @RequestParam String status){
+        Boolean result=artifactService.updateStatus(artifactId, status);
+        return ResponseEntity.status(HttpStatus.OK).body(result); //상태코드 update시에는 어떻게?
+    }
+
+    /**
+     * 산출물 상세 정보
+     */
+    @GetMapping("/artifacts/{artifactId}")
+    public ResponseEntity<ArtifactResDto> getDetails(@PathVariable Long artifactId){
+        ArtifactResDto artifactResDto=artifactService.getDetailsById(artifactId);
+        return ResponseEntity.status(HttpStatus.OK).body(artifactResDto);
+    }
+
 }
