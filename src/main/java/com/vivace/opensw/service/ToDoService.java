@@ -24,11 +24,13 @@ public class ToDoService {
   private final ToDoRepository toDoRepository;
   private final ProjectRepository projectRepository;
   private final MemberRepository memberRepository;
-  public ToDo save(AddToDo addToDo) {//생성시 프로젝트 저장
-    Project project=projectRepository.findById(addToDo.getProjectId())
-        .orElseThrow(()->new IllegalArgumentException("cannot find"));
+  private final MemberService memberService;
+  public ToDo save(AddToDo addToDo) {
+    System.out.println("Looking for project with ID: " + addToDo.getProjectId());//생성시 프로젝트 저장
+    Project project=projectRepository.findById(addToDo.getProjectId()).
+        orElseThrow(()->new IllegalArgumentException("cannot found"));
 
-    Member member=memberRepository.findById(addToDo.getMemberId())
+    Member member=memberRepository.findById()
         .orElseThrow(()->new IllegalArgumentException("cannot find"));
     ToDo todo=new ToDo().builder()
         .project(project)
@@ -37,7 +39,7 @@ public class ToDoService {
     return toDoRepository.save(todo);
   }
   public List<ToDoList> getToDosByProjectId(Long projectId){
-   List<ToDo> toDoList=toDoRepository.findByProjectId(projectId).get();
+   List<ToDo> toDoList=toDoRepository.findByProjectId(projectId).stream().toList();
    ToDoList todo;
    List<ToDoList> todoDtoList=new ArrayList<>();
    for(ToDo Todo:toDoList){
@@ -53,7 +55,7 @@ public class ToDoService {
 
   }
   public List<ToDoList> getMyToDosByProjectId(Long projectId,Long memberId){
-    List<ToDo> toDoList = toDoRepository.findByProjectIdAndMemberId(projectId, memberId).get();
+    List<ToDo> toDoList = toDoRepository.findByProjectIdAndMemberId(projectId, memberId);
     List<ToDoList> todoDtoList=new ArrayList<>();
 
     for(ToDo todo:toDoList){
