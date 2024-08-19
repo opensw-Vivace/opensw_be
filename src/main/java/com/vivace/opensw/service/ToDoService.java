@@ -7,6 +7,8 @@ import com.vivace.opensw.dto.todo.ToDoList;
 import com.vivace.opensw.entity.Member;
 import com.vivace.opensw.entity.Project;
 import com.vivace.opensw.entity.ToDo;
+import com.vivace.opensw.global.exception.CustomException;
+import com.vivace.opensw.global.exception.ErrorCode;
 import com.vivace.opensw.repository.MemberRepository;
 import com.vivace.opensw.repository.ProjectRepository;
 import com.vivace.opensw.repository.ToDoRepository;
@@ -27,11 +29,11 @@ public class ToDoService {
   private final MemberService memberService;
   public ToDo save(AddToDo addToDo) {
     System.out.println("Looking for project with ID: " + addToDo.getProjectId());//생성시 프로젝트 저장
-    Project project=projectRepository.findById(addToDo.getProjectId()).
-        orElseThrow(()->new IllegalArgumentException("cannot found"));
+    Project project=projectRepository.findById(addToDo.getProjectId())
+        .orElseThrow(() -> new CustomException(ErrorCode.PROJECT_NOT_FOUND));
 
     Member member=memberRepository.findById(memberService.getCurrentMember().getId())
-        .orElseThrow(()->new IllegalArgumentException("cannot find"));
+        .orElseThrow(() -> new CustomException( ErrorCode.MEMBER_NOT_FOUND));
     ToDo todo=new ToDo().builder()
         .title(addToDo.getTitle())
         .content(addToDo.getContent())
@@ -56,7 +58,7 @@ public class ToDoService {
    ToDoList todo;
    List<ToDoList> todoDtoList=new ArrayList<>();
     Member member=memberRepository.findById(memberService.getCurrentMember().getId())
-        .orElseThrow(()->new IllegalArgumentException("cannot find"));
+        .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
    for(ToDo Todo:toDoList){
       todo=new ToDoList().builder()
           .title(Todo.getTitle())
@@ -91,16 +93,20 @@ public class ToDoService {
     return toDoRepository.findAll();
   }
   @Transactional
-  public ToDo update(Long id, UpdateToDo updateToDo){
-    Project project=projectRepository.findById(updateToDo.getProjectId())
-        .orElseThrow(()->new IllegalArgumentException("cannot find"));
+  public ToDo update(Long id, UpdateToDo updateToDo) {
+    Project project = projectRepository.findById(updateToDo.getProjectId())
+        .orElseThrow(() -> new CustomException(ErrorCode.PROJECT_NOT_FOUND));
 
-    Member member=memberRepository.findById(memberService.getCurrentMember().getId())
-        .orElseThrow(()->new IllegalArgumentException("cannot find"));
-   ToDo todo=toDoRepository.findById(id).orElseThrow(()->new IllegalArgumentException());
-   todo.update(updateToDo.getTitle(), updateToDo.getContent(), updateToDo.getStatus());
+    Member member = memberRepository.findById(memberService.getCurrentMember().getId())
+        .orElseThrow(() -> new CustomException( ErrorCode.MEMBER_NOT_FOUND));
+
+    ToDo todo = toDoRepository.findById(id)
+        .orElseThrow(() -> new CustomException(ErrorCode.TODO_NOT_FOUND));
+
+    todo.update(updateToDo.getTitle(), updateToDo.getContent(), updateToDo.getStatus());
 
     return toDoRepository.save(todo);
   }
+
 
 }

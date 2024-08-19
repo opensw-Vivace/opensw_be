@@ -41,7 +41,8 @@ public enum ErrorCode {
     // 각 리소스를 찾지 못함
     MEMBER_NOT_FOUND(404, "사용자를 찾을 수 없습니다."),
     ARTIFACT_NOT_FOUND(404, "산출물을 찾을 수 없습니다."),
-
+    PROJECT_NOT_FOUND(404,"프로젝트를 찾을 수 없습니다"),
+    TODO_NOT_FOUND(404,"할 일을 찾을 수 없습니다"),
     // 409 Conflict
     // 중복 리소스 생성 시도
     EMAIL_ALREADY_EXISTS(409, "email:이미 가입된 이메일입니다."),

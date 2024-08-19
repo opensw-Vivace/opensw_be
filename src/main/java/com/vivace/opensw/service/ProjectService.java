@@ -4,6 +4,8 @@ import com.vivace.opensw.dto.project.ProjectAddRequestDto;
 import com.vivace.opensw.entity.Participate;
 import com.vivace.opensw.entity.Position;
 import com.vivace.opensw.entity.Project;
+import com.vivace.opensw.global.exception.CustomException;
+import com.vivace.opensw.global.exception.ErrorCode;
 import com.vivace.opensw.repository.*;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -51,7 +53,7 @@ public class ProjectService {
   }
 
   public Project findById(Long id){
-    return projectRepository.findById(id).orElseThrow(()->new IllegalArgumentException("not found: "+id));
+    return projectRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.PROJECT_NOT_FOUND));
   }
 
   public List<Project> findAll(){
