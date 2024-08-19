@@ -15,5 +15,5 @@ public class AddToDo {
   private String content;
   private DocsStatus status;
   private Long projectId;
-  private Long memberId;//나의 할일
+  //나의 할일
 }

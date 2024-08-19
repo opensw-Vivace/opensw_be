@@ -1,10 +1,14 @@
 package com.vivace.opensw.dto.todo;
 
 import com.vivace.opensw.model.DocsStatus;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @NoArgsConstructor
 @AllArgsConstructor
+@Setter
 @Getter
 @Setter
 @Builder

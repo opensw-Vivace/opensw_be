@@ -4,6 +4,8 @@ import com.vivace.opensw.dto.todo.AddToDo;
 import com.vivace.opensw.dto.todo.UpdateToDo;
 import com.vivace.opensw.dto.todo.ToDoList;
 import com.vivace.opensw.entity.ToDo;
+import com.vivace.opensw.service.MemberService;
+import com.vivace.opensw.service.ProjectService;
 import com.vivace.opensw.service.ToDoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -16,13 +18,12 @@ import java.util.List;
 @RestController
 public class ToDoController {
   private final ToDoService toDoService;
+  private final ProjectService projectService;
+  private final MemberService memberService;
   @PostMapping("/projects/{projectId}/todos")
   public ResponseEntity<ToDo> addToDo(@RequestBody AddToDo addToDo, @PathVariable("projectId") Long id){
-    addToDo.setProjectId(id);
-
-    ToDo toDo=toDoService.save(addToDo);
-    return ResponseEntity.status(HttpStatus.CREATED)
-        .body(toDo);
+    ToDo todo=toDoService.save(addToDo);
+    return ResponseEntity.ok().body(todo);
   }
   @PatchMapping("/todos/{todoId}")
   public ResponseEntity<ToDo> modifyToDo(@RequestBody UpdateToDo updateToDo, @PathVariable("todoId") Long id){
@@ -34,4 +35,5 @@ public class ToDoController {
     List<ToDoList> todos=toDoService.getToDosByProjectId(projectid);
     return ResponseEntity.ok().body(todos);
   }
+
 }
