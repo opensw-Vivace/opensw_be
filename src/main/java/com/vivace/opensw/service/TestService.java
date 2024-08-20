@@ -63,6 +63,7 @@ public class TestService {
     public void deleteTest(Long testId) {
         Test test = getTestById(testId);
         validateIsMine(test);
+        test.clearAssociations();
         testRepository.delete(test);
     }
 

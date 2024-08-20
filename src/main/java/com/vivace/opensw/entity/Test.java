@@ -45,4 +45,9 @@ public class Test extends BaseEntity {
         this.content = content;
         this.status = status;
     }
+
+    public void clearAssociations() {
+        this.project = null;
+        this.member = null;
+    }
 }
