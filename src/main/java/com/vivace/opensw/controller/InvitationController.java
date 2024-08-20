@@ -1,6 +1,8 @@
 package com.vivace.opensw.controller;
 
 import com.vivace.opensw.dto.invitation.InvitationReqDto;
+import com.vivace.opensw.dto.invitation.InvitationResDto;
+import com.vivace.opensw.dto.invitation.InvitationSendDto;
 import com.vivace.opensw.dto.position.PositionListReqDto;
 import com.vivace.opensw.service.InvitationService;
 import lombok.RequiredArgsConstructor;
@@ -23,8 +25,8 @@ public class InvitationController {
      * 발송 되었는데 500에러. responseEntity설정 해야할 듯
      */
     @PostMapping("/invitations")
-    public ResponseEntity send(@RequestBody InvitationReqDto InvitationReqDto){
-        invitationService.send(InvitationReqDto);
+    public ResponseEntity send(@RequestBody InvitationSendDto invitationSendDto){
+        invitationService.send(invitationSendDto);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
@@ -32,9 +34,9 @@ public class InvitationController {
      * 테스트용. 토큰 적용 전까지 id직접 입력해서 확인
      * 유저가 받은 초대장 조회.
      */
-    @GetMapping("/invitations/{receiverId}")
-    public ResponseEntity<List<InvitationReqDto>> findByReceiverId(@PathVariable Long receiverId){
-        return ResponseEntity.status(HttpStatus.OK).body(invitationService.findByReceiverId(receiverId)) ;
+    @GetMapping("/invitations")
+    public ResponseEntity<List<InvitationResDto>> findByReceiverId(){
+        return ResponseEntity.status(HttpStatus.OK).body(invitationService.getMyInvitations()) ;
     }
 
     /**
