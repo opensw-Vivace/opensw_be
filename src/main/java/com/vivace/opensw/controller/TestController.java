@@ -24,26 +24,26 @@ public class TestController {
     // 테스트 목록 조회
     @GetMapping("/projects/{projectId}/tests")
     public ResponseEntity<?> getTestList(@PathVariable final Long projectId) {
-        return ResponseEntity.status(HttpStatus.OK).body(testService.getTestList(projectId));
+        return ResponseEntity.ok().body(testService.getTestList(projectId));
     }
 
     // 개별 테스트 상세 조회
     @GetMapping("/tests/{testId}")
     public ResponseEntity<?> getTestDetail(@PathVariable final Long testId) {
-        return ResponseEntity.status(HttpStatus.OK).body(testService.getTestDetail(testId));
+        return ResponseEntity.ok().body(testService.getTestDetail(testId));
     }
 
     // 테스트 수정
     @PatchMapping("/tests/{testId}")
     public ResponseEntity<?> motifyTest(@PathVariable final Long testId, @RequestBody @Valid TestUpdateReqDto testUpdateReqDto) {
         testService.motifyTest(testId, testUpdateReqDto);
-        return ResponseEntity.status(HttpStatus.OK).build();
+        return ResponseEntity.ok().build();
     }
 
     // 테스트 삭제
     @DeleteMapping("/tests/{testId}")
     public ResponseEntity<?> deleteTest(@PathVariable final Long testId) {
         testService.deleteTest(testId);
-        return ResponseEntity.status(HttpStatus.OK).build();
+        return ResponseEntity.ok().build();
     }
 }
