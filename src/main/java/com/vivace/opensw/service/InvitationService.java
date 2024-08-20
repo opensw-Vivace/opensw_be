@@ -1,6 +1,7 @@
 package com.vivace.opensw.service;
 
-import com.vivace.opensw.dto.invitation.InvitationReqDto;
+import com.vivace.opensw.dto.invitation.InvitationResDto;
+import com.vivace.opensw.dto.invitation.InvitationSendDto;
 import com.vivace.opensw.dto.position.PositionListReqDto;
 import com.vivace.opensw.entity.Invitation;
 import com.vivace.opensw.entity.Member;
@@ -17,6 +18,8 @@ import lombok.RequiredArgsConstructor;
 import org.apache.tomcat.util.digester.ArrayStack;
 import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -33,6 +36,7 @@ public class InvitationService {
     private final MemberRepository memberRepository;
     private final InvitationRepository invitationRepository;
     private final ParticipateRepository participateRepository;
+    private final MemberService memberService;
     /**
      *  Invitation(초대장)에 관련된 crud 담당
      */
@@ -40,27 +44,30 @@ public class InvitationService {
     /**
      * 초대장 발송.db에 저장. add
      */
-    public void send(InvitationReqDto InvitationReqDto){
+    public void send(InvitationSendDto invitationSendDto){
+
         Invitation Invitation=new Invitation().builder()
-                .project(projectRepository.findById(InvitationReqDto.getProjectId()).get())
-                .sender(memberRepository.findById(InvitationReqDto.getSenderId()).get())
-                .receiver(memberRepository.findById(InvitationReqDto.getReceiverId()).get())
+                .project(projectRepository.findById(invitationSendDto.getProjectId())
+                        .orElseThrow(()->new CustomException(ErrorCode.PROJECT_NOT_FOUND)))
+                .sender(memberService.getCurrentMember())
+                .receiver(memberService.getActiveMemberById(invitationSendDto.getReceiverId()))
                 .createdAt(LocalDateTime.now())
-                        .build();
+                .build();
 
 
         InvitationRepository.save(Invitation);
     }
 
     /**
-     * 특정 멤버가 받은 초대장. 수신자의id로 조회.
+     * 특정 멤버가 받은 초대장. 현재 나의 access token으로 조회.
      */
-    public List<InvitationReqDto> findByReceiverId(Long id){
-        List<Invitation> InvitationList= InvitationRepository.findByReceiverId(id).get();
-        List<InvitationReqDto> invitationReqDtoList =new ArrayList<>();
-        InvitationReqDto InvitationReqDto;
+    public List<InvitationResDto> getMyInvitations(){
+        Member receiver=memberService.getCurrentMember();
+        List<Invitation> InvitationList= InvitationRepository.findByReceiverId(receiver.getId())
+                .orElseThrow(()->new CustomException(ErrorCode.INVITATION_NOT_FOUND));
+        List<InvitationResDto> invitationResDtoList =new ArrayList<>();
         for(Invitation Invitation:InvitationList){ //하나씩 꺼내서 dto로 변환 후 리스트에 삽입
-            InvitationReqDto =new InvitationReqDto().builder()
+            InvitationResDto invitationResDto =new InvitationResDto().builder()
                     .id(Invitation.getId())
                     .projectId(Invitation.getProject().getId())
                     .senderId(Invitation.getSender().getId())
@@ -69,11 +76,11 @@ public class InvitationService {
                     .updateAt(Invitation.getUpdatedAt())
                     .build();
 
-            invitationReqDtoList.add(InvitationReqDto);
+            invitationResDtoList.add(invitationResDto);
         }
 
         //리스트 반환
-        return invitationReqDtoList;
+        return invitationResDtoList;
     }
 
 
