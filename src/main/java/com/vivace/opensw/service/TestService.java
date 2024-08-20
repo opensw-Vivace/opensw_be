@@ -68,7 +68,7 @@ public class TestService {
 
     // 테스트가 내 것인지 권한 확인 (수정, 삭제)
     private void validateIsMine(Test test) {
-        if (test.getMember().equals(memberService.getCurrentMember())) {
+        if (!test.getMember().equals(memberService.getCurrentMember())) {
             throw new CustomException(ErrorCode.UNAUTHORIZED_REQUEST);
         }
     }
