@@ -24,15 +24,13 @@ public class TestController {
     // 테스트 목록 조회
     @GetMapping("/projects/{projectId}/tests")
     public ResponseEntity<?> getTestList(@PathVariable final Long projectId) {
-        testService.getTestList(projectId);
-        return ResponseEntity.status(HttpStatus.OK).build();
+        return ResponseEntity.status(HttpStatus.OK).body(testService.getTestList(projectId));
     }
 
     // 개별 테스트 상세 조회
     @GetMapping("/tests/{testId}")
     public ResponseEntity<?> getTestDetail(@PathVariable final Long testId) {
-        testService.getTestDetail(testId);
-        return ResponseEntity.status(HttpStatus.OK).build();
+        return ResponseEntity.status(HttpStatus.OK).body(testService.getTestDetail(testId));
     }
 
     // 테스트 수정
