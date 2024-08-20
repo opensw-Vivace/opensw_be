@@ -27,7 +27,7 @@ public class ToDoService {
   private final ProjectRepository projectRepository;
   private final MemberRepository memberRepository;
   private final MemberService memberService;
-  public ToDo save(AddToDo addToDo) {
+  public ToDo save(AddToDo addToDo) {//특정 프로젝트 안에서 todo 생성
     System.out.println("Looking for project with ID: " + addToDo.getProjectId());//생성시 프로젝트 저장
     Project project=projectRepository.findById(addToDo.getProjectId())
         .orElseThrow(() -> new CustomException(ErrorCode.PROJECT_NOT_FOUND));
@@ -43,9 +43,9 @@ public class ToDoService {
     return toDoRepository.save(todo);
   }
 
-  public ToDoList getToDoByMemberId(Long todoId){
+  public ToDoList getToDoByMemberId(Long todoId){//사용안함
     Member member=memberService.getCurrentMember();
-    ToDo toDo=toDoRepository.findByMemberId(member.getId());
+    ToDo toDo=toDoRepository.findByMemberId(member.getId()).get();
     ToDoList toDoList;
 
     toDoList=new ToDoList().builder()
@@ -55,7 +55,7 @@ public class ToDoService {
         .build();
     return toDoList;
   }
-  public List<ToDoList> getToDosByProjectId(Long projectId){
+  public List<ToDoList> getToDosByProjectId(Long projectId){//사용안함
    List<ToDo> toDoList=toDoRepository.findByProjectId(projectId).stream().toList();
    ToDoList todo;
    List<ToDoList> todoDtoList=new ArrayList<>();
@@ -72,29 +72,11 @@ public class ToDoService {
    return todoDtoList;
 
   }
-  public List<ToDoList> getMyToDosByProjectId(Long projectId,Long memberId){
-    List<ToDo> toDoList = toDoRepository.findByProjectIdAndMemberId(projectId, memberId);
-    List<ToDoList> todoDtoList=new ArrayList<>();
 
-    for(ToDo todo:toDoList){
-      ToDoList todoDto=ToDoList.builder().
-          title(todo.getTitle()).
-          status(todo.getStatus()).
-          ProjectId(todo.getProject().getId())
-          .content(todo.getContent())
-          .build();
-      todoDtoList.add(todoDto);
 
-    }
-    return todoDtoList;
 
-  }
-
-  public List<ToDo> findAll(){
-    return toDoRepository.findAll();
-  }
   @Transactional
-  public ToDo update(Long id, UpdateToDo updateToDo) {
+  public ToDo update(Long id, UpdateToDo updateToDo) {//할 일 수정 메서드
     Project project = projectRepository.findById(updateToDo.getProjectId())
         .orElseThrow(() -> new CustomException(ErrorCode.PROJECT_NOT_FOUND));
 
@@ -109,8 +91,8 @@ public class ToDoService {
     return toDoRepository.save(todo);
   }
   @Transactional
-  public List<ToDoList> getToDosByProjectIdAndMember(Long projectId) {
-    Member member = memberService.getCurrentMember(); // 현재 로그인된 멤버를 가져옵니다.
+  public List<ToDoList> getToDosByProjectIdAndMember(Long projectId) {//로그인 한 사람의 특정 프로젝트 안에서 할 일 조회
+    Member member = memberService.getCurrentMember();
     System.out.println(member.getId());
 
     List<ToDo> toDoList = toDoRepository.findByProjectIdAndMemberId(projectId, member.getId());

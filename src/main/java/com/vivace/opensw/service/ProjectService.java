@@ -29,7 +29,7 @@ public class ProjectService {
   private final ParticipateRepository participateRepository;
   private final PositionRepository positionRepository;
   @Transactional
-  public Project save(ProjectAddRequestDto addProject) {//
+  public Project save(ProjectAddRequestDto addProject) {//프로젝트 생성 메서드
     Project project=projectRepository.save(addProject.toEntity());
     List<Position> positionList=new ArrayList<>();
     Participate participate= Participate.builder().
@@ -51,7 +51,7 @@ public class ProjectService {
     return project;
   }
 
-  public Project findById(Long id){
+  public Project findById(Long id){//특정 프로젝트 찾기
     return projectRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.PROJECT_NOT_FOUND));
   }
 
@@ -62,7 +62,7 @@ public class ProjectService {
   public void deleteById(long id){
     projectRepository.deleteById(id);
   }
-  public List<ProjectGetMembersDto> getProjectParticipants(Long id){
+  public List<ProjectGetMembersDto> getProjectParticipants(Long id){//프로젝트 멤버 조회
     //매개변수 프로젝트 아이디
     Project project=projectRepository.findById(id).
          orElseThrow(()->new CustomException(ErrorCode.PROJECT_NOT_FOUND));

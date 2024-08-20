@@ -10,6 +10,6 @@ import java.util.Optional;
 public interface ToDoRepository extends JpaRepository<ToDo, Long> {
 
   List<ToDo> findByProjectId(Long id);
-  ToDo findByMemberId(Long id);
+  Optional<ToDo> findByMemberId(Long id);
   List<ToDo> findByProjectIdAndMemberId(Long projectId,Long memberId);
 }

@@ -5,6 +5,7 @@ import com.vivace.opensw.dto.issue.IssueListDto;
 import com.vivace.opensw.entity.Issue;
 import com.vivace.opensw.entity.Member;
 import com.vivace.opensw.entity.Project;
+import com.vivace.opensw.entity.ToDo;
 import com.vivace.opensw.global.exception.CustomException;
 import com.vivace.opensw.global.exception.ErrorCode;
 import com.vivace.opensw.repository.IssueRepository;
@@ -25,11 +26,11 @@ public class IssueService {
   private final ProjectRepository projectRepository;
   private final MemberRepository memberRepository;
   private final MemberService memberService;
+
   public Issue save(AddIssueDto addIssueDto){
     Project project=projectRepository.findById(addIssueDto.getProjectId())
         .orElseThrow(()->new CustomException(ErrorCode.ISSUE_NOT_FOUND));
-    Member member=memberRepository.findById(memberService.getCurrentMember().getId())
-        .orElseThrow(()->new IllegalArgumentException("cannot found"));
+    Member member=memberService.getCurrentMember();
     Issue issue=new Issue().builder().
         title(addIssueDto.getTitle())
         .content(addIssueDto.getContent())
@@ -40,14 +41,15 @@ public class IssueService {
     return issueRepository.save(issue);
   }
   public List<IssueListDto> getIssuesByProjectId(Long projectId){
+    Member member=memberService.getCurrentMember();
+    List<Issue> issueList=issueRepository.findByProjectIdAndMemberId(projectId, member.getId());
 
-    return issueRepository.findByProjectId(projectId).orElseThrow()
-        .stream()
+    return issueList.stream()
         .map(issue -> IssueListDto.builder()
             .title(issue.getTitle())
             .content(issue.getContent())
             .status(issue.getStatus())
-            .projectId(issue.getProject().getId())
+            .projectId(projectId)
             .build())
         .collect(Collectors.toList());
 
