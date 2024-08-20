@@ -32,8 +32,7 @@ public class ToDoService {
     Project project=projectRepository.findById(addToDo.getProjectId())
         .orElseThrow(() -> new CustomException(ErrorCode.PROJECT_NOT_FOUND));
 
-    Member member=memberRepository.findById(memberService.getCurrentMember().getId())
-        .orElseThrow(() -> new CustomException( ErrorCode.MEMBER_NOT_FOUND));
+    Member member=memberService.getCurrentMember();
     ToDo todo=new ToDo().builder()
         .title(addToDo.getTitle())
         .content(addToDo.getContent())
@@ -60,8 +59,7 @@ public class ToDoService {
    List<ToDo> toDoList=toDoRepository.findByProjectId(projectId).stream().toList();
    ToDoList todo;
    List<ToDoList> todoDtoList=new ArrayList<>();
-    Member member=memberRepository.findById(memberService.getCurrentMember().getId())
-        .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+    Member member=memberService.getCurrentMember();
    for(ToDo Todo:toDoList){
       todo=new ToDoList().builder()
           .title(Todo.getTitle())
@@ -110,6 +108,25 @@ public class ToDoService {
 
     return toDoRepository.save(todo);
   }
+  @Transactional
+  public List<ToDoList> getToDosByProjectIdAndMember(Long projectId) {
+    Member member = memberService.getCurrentMember(); // 현재 로그인된 멤버를 가져옵니다.
+    System.out.println(member.getId());
+
+    List<ToDo> toDoList = toDoRepository.findByProjectIdAndMemberId(projectId, member.getId());
+
+
+    return toDoList.stream()
+        .map(toDo -> ToDoList.builder()
+            .title(toDo.getTitle())
+            .content(toDo.getContent())
+            .status(toDo.getStatus())
+            .ProjectId(projectId)
+            .build())
+        .collect(Collectors.toList());
+  }
+
+
 
 
 }

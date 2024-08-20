@@ -80,6 +80,7 @@ public class ProjectService {
       }
       result.add(new ProjectGetMembersDto(membername,positions));
     }
+    System.out.println(memberService.getCurrentMember().getId());
     return result;
 
 

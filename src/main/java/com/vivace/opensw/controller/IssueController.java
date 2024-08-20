@@ -27,4 +27,5 @@ public class IssueController {
     List<IssueListDto> issueListDtos=issueService.getIssuesByProjectId(projectid);
     return ResponseEntity.ok().body(issueListDtos);
   }
+
 }
