@@ -45,7 +45,7 @@ public class Member extends BaseEntity {
     @Column
     private String accessToken;
 
-    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Position> positionList;
     @Builder
     public Member(Long id, String email, String name, String pw) {

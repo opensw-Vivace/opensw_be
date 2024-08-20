@@ -1,7 +1,5 @@
 package com.vivace.opensw.dto.project;
 
-import com.vivace.opensw.entity.Participate;
-import com.vivace.opensw.entity.Position;
 import lombok.*;
 
 import java.util.List;
@@ -11,7 +9,7 @@ import java.util.List;
 @Getter
 @Setter
 @Builder
-public class ProjectGetPositionsDto {
+public class ProjectGetMembersDto {
    String name;
-   List<Position> Position;
+   List<String> Position;
 }

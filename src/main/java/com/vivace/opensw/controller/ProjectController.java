@@ -1,7 +1,8 @@
 package com.vivace.opensw.controller;
 
 import com.vivace.opensw.dto.project.ProjectAddRequestDto;
-import com.vivace.opensw.dto.project.ProjectGetPositionsDto;
+
+import com.vivace.opensw.dto.project.ProjectGetMembersDto;
 import com.vivace.opensw.dto.project.ProjectListViewResponseDto;
 import com.vivace.opensw.service.MemberService;
 import com.vivace.opensw.service.ProjectService;
@@ -47,21 +48,16 @@ public class ProjectController {
     return ResponseEntity.status(HttpStatus.CREATED)
         .body(projectDto);
   }
-//  @GetMapping("/projects/{projectId}/members")
-//  public ResponseEntity<List<ProjectGetPositionsDto>> getProjectMembers(@PathVariable("projectId") Long id){
-//    Project project=projectService.findById(id);
-//    if(project==null){
-//      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-//    }
-//    List<ProjectGetPositionsDto> participates=projectService.getProjectParticipants(id);
-//    return ResponseEntity.status(HttpStatus.CREATED)
-//        .body(participates);
-//  }
+  @GetMapping("/projects/{projectId}/members")
+  public ResponseEntity<List<ProjectGetMembersDto>> getProjectMembers(@PathVariable("projectId") Long id){
+    List<ProjectGetMembersDto> participants = projectService.getProjectParticipants(id);
+    return ResponseEntity.status(HttpStatus.OK).body(participants);
+  }
 
 
 
   @DeleteMapping("/projects/{id}")
-  public ResponseEntity<Void> deleteProjects(@PathVariable long id){
+  public ResponseEntity<Void> deleteProjects(@PathVariable Long id){
     projectService.deleteById(id);
     return ResponseEntity.ok().build();
   }
