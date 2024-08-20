@@ -5,6 +5,8 @@ import com.vivace.opensw.dto.issue.IssueListDto;
 import com.vivace.opensw.entity.Issue;
 import com.vivace.opensw.entity.Member;
 import com.vivace.opensw.entity.Project;
+import com.vivace.opensw.global.exception.CustomException;
+import com.vivace.opensw.global.exception.ErrorCode;
 import com.vivace.opensw.repository.IssueRepository;
 import com.vivace.opensw.repository.MemberRepository;
 import com.vivace.opensw.repository.ProjectRepository;
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -24,7 +27,7 @@ public class IssueService {
   private final MemberService memberService;
   public Issue save(AddIssueDto addIssueDto){
     Project project=projectRepository.findById(addIssueDto.getProjectId())
-        .orElseThrow(()->new IllegalArgumentException("cannot found"));
+        .orElseThrow(()->new CustomException(ErrorCode.ISSUE_NOT_FOUND));
     Member member=memberRepository.findById(memberService.getCurrentMember().getId())
         .orElseThrow(()->new IllegalArgumentException("cannot found"));
     Issue issue=new Issue().builder().
@@ -37,19 +40,17 @@ public class IssueService {
     return issueRepository.save(issue);
   }
   public List<IssueListDto> getIssuesByProjectId(Long projectId){
-    List<Issue> issueListDtos=issueRepository.findByProjectId(projectId).get();
-    IssueListDto issue;
-    List<IssueListDto> issueDtoList=new ArrayList<>();
-    for(Issue Issue:issueListDtos){
-      issue=new IssueListDto().builder().
-      title(Issue.getTitle()).
-          content(Issue.getContent()).
-          status(Issue.getStatus()).
-          projectId(Issue.getProject().getId()).
-          build();
-      issueDtoList.add(issue);
-    }
-    return  issueDtoList;
+
+    return issueRepository.findByProjectId(projectId).orElseThrow()
+        .stream()
+        .map(issue -> IssueListDto.builder()
+            .title(issue.getTitle())
+            .content(issue.getContent())
+            .status(issue.getStatus())
+            .projectId(issue.getProject().getId())
+            .build())
+        .collect(Collectors.toList());
+
   }
 
 }

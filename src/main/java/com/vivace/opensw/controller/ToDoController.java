@@ -32,7 +32,7 @@ public class ToDoController {
   }
   @GetMapping("/todos/{todoId}")
   public ResponseEntity<ToDoList> getMyTodobyId(@PathVariable("todoId") Long id){
-     ToDoList todo=toDoService.getToDoByTodoId(id);
+     ToDoList todo=toDoService.getToDoByMemberId(id);
      return ResponseEntity.ok().body(todo);
   }
   @GetMapping("/projects/{projectId}/todos")

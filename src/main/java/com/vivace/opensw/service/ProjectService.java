@@ -1,11 +1,13 @@
 package com.vivace.opensw.service;
 
 import com.vivace.opensw.dto.project.ProjectAddRequestDto;
+import com.vivace.opensw.dto.project.ProjectGetPositionsDto;
 import com.vivace.opensw.entity.Participate;
 import com.vivace.opensw.entity.Position;
 import com.vivace.opensw.entity.Project;
 import com.vivace.opensw.global.exception.CustomException;
 import com.vivace.opensw.global.exception.ErrorCode;
+import com.vivace.opensw.model.Role;
 import com.vivace.opensw.repository.*;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -23,9 +25,7 @@ public class ProjectService {
   private final ArtifactRepository artifactRepository;
   private final ProjectRepository projectRepository;
   private final ArtifactTypeRepository artifactTypeRepository;
-  private final ImgRepository imgRepository;
-  private final CreatorRepository creatorRepository;
-  private final MemberRepository memberRepository;
+  private final ProjectService projectService;
   private final MemberService memberService;
   private final ParticipateRepository participateRepository;
   private final PositionRepository positionRepository;
@@ -63,15 +63,14 @@ public class ProjectService {
   public void deleteById(long id){
     projectRepository.deleteById(id);
   }
-  public List<Participate> getProjectParticipants(Long id){
-    //매개변수 프로젝트 아이디
-    Project project=findById(id);
-    if(project!=null){
-      return project.getParticipateList();
-    }
-    else
-      return null;
-  }
+//  public List<ProjectGetPositionsDto> getProjectParticipants(Long id){
+//    //매개변수 프로젝트 아이디
+//    Project project=projectRepository.findById(id).
+//        orElseThrow(()->new CustomException(ErrorCode.PROJECT_NOT_FOUND));
+//    Participate participate= Participate.builder().project(project).build();
+//    List<Role> role=
+//
+//  }
 
 
 }

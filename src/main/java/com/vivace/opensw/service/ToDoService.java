@@ -43,9 +43,12 @@ public class ToDoService {
         .build();
     return toDoRepository.save(todo);
   }
-  public ToDoList getToDoByTodoId(Long todoId){
-    ToDo toDo=toDoRepository.findById(todoId).orElseThrow(()->new IllegalArgumentException("there isn't todo"));
+
+  public ToDoList getToDoByMemberId(Long todoId){
+    Member member=memberService.getCurrentMember();
+    ToDo toDo=toDoRepository.findByMemberId(member.getId());
     ToDoList toDoList;
+
     toDoList=new ToDoList().builder()
         .title(toDo.getTitle())
         .content(toDo.getContent())
