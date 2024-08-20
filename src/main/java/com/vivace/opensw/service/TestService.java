@@ -76,7 +76,7 @@ public class TestService {
 
     @Transactional(readOnly = true)
     public List<Test> getTestsByProject(Project project, TestStatus status) {
-        return testRepository.findAllByProjectAndStatus(project, status);
+        return testRepository.findAllByProjectAndStatusOrderByIdDesc(project, status);
     }
 
     @Transactional(readOnly = true)

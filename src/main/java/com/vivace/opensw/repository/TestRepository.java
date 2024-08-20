@@ -8,5 +8,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface TestRepository extends JpaRepository<Test, Long> {
-    List<Test> findAllByProjectAndStatus(Project project, TestStatus status);
+    List<Test> findAllByProjectAndStatusOrderByIdDesc(Project project, TestStatus status);
 }
