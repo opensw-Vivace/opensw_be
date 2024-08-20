@@ -36,6 +36,8 @@ public enum ErrorCode {
     EXPIRED_ACCESS_TOKEN(401,"만료된 액세스 토큰입니다."),
     // 탈퇴한 회원
     MEMBER_STATUS_DELETED(401, "탈퇴한 회원입니다."),
+    // 탈퇴한 회원
+    NOT_PARTICIPATING(401, "프로젝트에 참여중이지 않습니다."),
 
     // 404 Not Found
     // 각 리소스를 찾지 못함
