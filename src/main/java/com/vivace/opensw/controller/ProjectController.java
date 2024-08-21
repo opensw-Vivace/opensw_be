@@ -31,16 +31,16 @@ public class ProjectController {
 
   }
 
-  @GetMapping("/projects")
-  public ResponseEntity<List<ProjectListViewResponseDto>> getProjects() {
-    List<ProjectListViewResponseDto> projects = projectService.findAll()
-        .stream()
-        .map(ProjectListViewResponseDto::from)
-        .toList();
-
-    return ResponseEntity.status(HttpStatus.CREATED)
-        .body(projects);
-  }
+//  @GetMapping("/projects")
+//  public ResponseEntity<List<ProjectListViewResponseDto>> getProjects() {
+//    List<ProjectListViewResponseDto> projects = projectService.findAll()
+//        .stream()
+//        .map(ProjectListViewResponseDto::from)
+//        .toList();
+//
+//    return ResponseEntity.status(HttpStatus.CREATED)
+//        .body(projects);
+//  }
 
   @GetMapping("/projects/{projectId}")
   public ResponseEntity<ProjectListViewResponseDto> getProject(@PathVariable("projectId") Long id){
@@ -66,6 +66,14 @@ public class ProjectController {
   public ResponseEntity<Void> deleteProjects(@PathVariable long id){
     projectService.deleteById(id);
     return ResponseEntity.ok().build();
+  }
+
+  /**
+   * 현재 로그인 한 멤버가 참여중인 프로젝트 dto 반환
+   */
+  @GetMapping("/projects")
+  public ResponseEntity<List<ProjectListViewResponseDto>> getMyProject(){
+    return ResponseEntity.status(HttpStatus.OK).body(projectService.getMyProject());
   }
 
 
