@@ -2,6 +2,7 @@ package com.vivace.opensw.service;
 
 import com.vivace.opensw.dto.project.ProjectAddRequestDto;
 import com.vivace.opensw.dto.project.ProjectGetMembersDto;
+import com.vivace.opensw.dto.project.ProjectListViewResponseDto;
 import com.vivace.opensw.entity.Participate;
 import com.vivace.opensw.entity.Position;
 import com.vivace.opensw.entity.Project;
@@ -25,6 +26,7 @@ public class ProjectService {
   private final MemberService memberService;
   private final ParticipateRepository participateRepository;
   private final PositionRepository positionRepository;
+
   @Transactional
   public Project save(ProjectAddRequestDto addProject) {//프로젝트 생성 메서드
     Project project=projectRepository.save(addProject.toEntity());
@@ -84,6 +86,32 @@ public class ProjectService {
     System.out.println(memberService.getCurrentMember().getId());
     return result;
   }
+
+  /**
+   * 내가 참여중인 프로젝트 리스트 반환
+   */
+  public List<ProjectListViewResponseDto> getMyProject(){
+
+      //현재 멤버가 참여중인 모든 포지션 리스트 가져옴
+      List<Position> positionList=positionRepository.findAllByMember(memberService.getCurrentMember())
+              .orElseThrow(()->new CustomException(ErrorCode.POSITION_NOT_FOUND));
+
+      // position으로부터 프로젝트 리스트 생성
+      // position -> participate -> project
+      Set<Project> projectSet=new LinkedHashSet<>(); //중복 제거를 위해 set사용
+      for(Position position:positionList){
+        projectSet.add(position.getParticipate().getProject());
+      }
+
+      //dto로 변경해서 출력
+      List<ProjectListViewResponseDto> projectListViewResponseDtoList=new ArrayList<>();
+      for(Project project: projectSet){
+        projectListViewResponseDtoList.add(ProjectListViewResponseDto.from(project));
+      }
+
+      return projectListViewResponseDtoList;
+  }
+
 
 
 }
