@@ -30,15 +30,17 @@ public class ToDoController {
     ToDo todo= toDoService.update(id,updateToDo);
     return ResponseEntity.ok().body(todo);
   }
-  @GetMapping("/todos/{todoId}")
-  public ResponseEntity<ToDoList> getMyTodobyId(@PathVariable("todoId") Long id){
-     ToDoList todo=toDoService.getToDoByTodoId(id);
-     return ResponseEntity.ok().body(todo);
-  }
+//  @GetMapping("/todos/{todoId}")
+//  public ResponseEntity<List<ToDoList>> getMyTodobyId(@PathVariable("todoId") Long id) {
+//    List<ToDoList> todoList = toDoService.getToDosByProjectIdAndMember(id);
+//    return ResponseEntity.ok().body(todoList);
+//  }
+
   @GetMapping("/projects/{projectId}/todos")
   public ResponseEntity<List<ToDoList>> getToDoList(@PathVariable("projectId") Long projectid){
-    List<ToDoList> todos=toDoService.getToDosByProjectId(projectid);
+    List<ToDoList> todos=toDoService.getToDosByProjectIdAndMember(projectid);
     return ResponseEntity.ok().body(todos);
   }
+
 
 }

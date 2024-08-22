@@ -1,5 +1,4 @@
 package com.vivace.opensw.controller;
-
 import com.vivace.opensw.dto.invitation.InvitationResDto;
 import com.vivace.opensw.dto.invitation.InvitationSendDto;
 import com.vivace.opensw.dto.position.PositionListReqDto;

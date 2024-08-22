@@ -50,6 +50,9 @@ public enum ErrorCode {
     POSITION_NOT_FOUND(404, "역할을 찾을 수 없습니다"),
     TEST_NOT_FOUND(404, "테스트를 찾을 수 없습니다."),
 
+    ISSUE_NOT_FOUND(404,"이슈를 찾을 수 없습니다"),
+
+
     // 409 Conflict
     // 중복 리소스 생성 시도
     EMAIL_ALREADY_EXISTS(409,   "email:이미 가입된 이메일입니다."),

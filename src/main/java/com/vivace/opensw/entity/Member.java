@@ -8,6 +8,8 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
+import java.util.List;
+
 
 @Entity
 @Getter
@@ -43,6 +45,8 @@ public class Member extends BaseEntity {
     @Column
     private String accessToken;
 
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Position> positionList;
     @Builder
     public Member(Long id, String email, String name, String pw) {
         this.id = id;
