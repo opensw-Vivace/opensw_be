@@ -67,7 +67,7 @@ public class JwtUtil {
         } catch (SecurityException | MalformedJwtException | UnsupportedJwtException | IllegalArgumentException e){
             throw new CustomException(ErrorCode.INVALID_TOKEN);
         } catch (ExpiredJwtException e) {
-            throw new CustomException(ErrorCode.EXPIRED_ACCESS_TOKEN);
+            return false; // filter에서 토큰 재발급 로직
         }
     }
 

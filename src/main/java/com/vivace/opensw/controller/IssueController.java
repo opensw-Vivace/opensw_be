@@ -24,9 +24,20 @@ public class IssueController {
   }
 
 
+
   @GetMapping("/projects/{projectId}/issues")
   public ResponseEntity<List<IssueListDto>> getIssueList(@PathVariable("projectId") Long projectid){
    List<IssueListDto> issueListDtos=issueService.getIssuesByProjectId(projectid);
     return ResponseEntity.ok().body(issueListDtos);
   }
+
+
+  @GetMapping("/issues/{issueId}")
+  public ResponseEntity<IssueListDto> getIssueDetail(@PathVariable("issueId") Long id){
+    IssueListDto issueListDto=issueService.getIssuesDetail(id);
+    return ResponseEntity.ok().body(issueListDto);
+  }
+
+
+
 }

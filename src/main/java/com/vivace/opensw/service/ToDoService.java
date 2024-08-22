@@ -7,6 +7,8 @@ import com.vivace.opensw.dto.todo.ToDoList;
 import com.vivace.opensw.entity.Member;
 import com.vivace.opensw.entity.Project;
 import com.vivace.opensw.entity.ToDo;
+import com.vivace.opensw.global.exception.CustomException;
+import com.vivace.opensw.global.exception.ErrorCode;
 import com.vivace.opensw.repository.MemberRepository;
 import com.vivace.opensw.repository.ProjectRepository;
 import com.vivace.opensw.repository.ToDoRepository;
@@ -25,12 +27,12 @@ public class ToDoService {
   private final ProjectRepository projectRepository;
   private final MemberRepository memberRepository;
   private final MemberService memberService;
-  public ToDo save(AddToDo addToDo) {//생성시 프로젝트 저장
+  public ToDo save(AddToDo addToDo) {//특정 프로젝트 안에서 todo 생성
+    System.out.println("Looking for project with ID: " + addToDo.getProjectId());//생성시 프로젝트 저장
     Project project=projectRepository.findById(addToDo.getProjectId())
-        .orElseThrow(()->new IllegalArgumentException("cannot find"));
+        .orElseThrow(() -> new CustomException(ErrorCode.PROJECT_NOT_FOUND));
 
-    Member member=memberRepository.findById(memberService.getCurrentMember().getId())
-        .orElseThrow(()->new IllegalArgumentException("cannot find"));
+    Member member=memberService.getCurrentMember();
     ToDo todo=new ToDo().builder()
         .title(addToDo.getTitle())
         .content(addToDo.getContent())
@@ -40,10 +42,24 @@ public class ToDoService {
         .build();
     return toDoRepository.save(todo);
   }
-  public List<ToDoList> getToDosByProjectId(Long projectId){
-   List<ToDo> toDoList=toDoRepository.findByProjectId(projectId).get();
+
+  public ToDoList getToDoByMemberId(Long todoId){//사용안함
+    Member member=memberService.getCurrentMember();
+    ToDo toDo=toDoRepository.findByMemberId(member.getId()).get();
+    ToDoList toDoList;
+
+    toDoList=new ToDoList().builder()
+        .title(toDo.getTitle())
+        .content(toDo.getContent())
+        .status(toDo.getStatus())
+        .build();
+    return toDoList;
+  }
+  public List<ToDoList> getToDosByProjectId(Long projectId){//사용안함
+   List<ToDo> toDoList=toDoRepository.findByProjectId(projectId).stream().toList();
    ToDoList todo;
    List<ToDoList> todoDtoList=new ArrayList<>();
+    Member member=memberService.getCurrentMember();
    for(ToDo Todo:toDoList){
       todo=new ToDoList().builder()
           .title(Todo.getTitle())
@@ -56,32 +72,43 @@ public class ToDoService {
    return todoDtoList;
 
   }
-  public List<ToDoList> getMyToDosByProjectId(Long projectId,Long memberId){
-    List<ToDo> toDoList = toDoRepository.findByProjectIdAndMemberId(projectId, memberId).get();
-    List<ToDoList> todoDtoList=new ArrayList<>();
 
-    for(ToDo todo:toDoList){
-      ToDoList todoDto=ToDoList.builder().
-          title(todo.getTitle()).
-          status(todo.getStatus()).
-          ProjectId(todo.getProject().getId())
-          .content(todo.getContent())
-          .build();
-      todoDtoList.add(todoDto);
 
-    }
-    return todoDtoList;
 
-  }
-
-  public List<ToDo> findAll(){
-    return toDoRepository.findAll();
-  }
   @Transactional
-  public ToDo update(Long id, UpdateToDo updateToDo){
-    ToDo todo=toDoRepository.findById(id).orElseThrow(()->new IllegalArgumentException("not found"+id));
+  public ToDo update(Long id, UpdateToDo updateToDo) {//할 일 수정 메서드
+    Project project = projectRepository.findById(updateToDo.getProjectId())
+        .orElseThrow(() -> new CustomException(ErrorCode.PROJECT_NOT_FOUND));
+
+    Member member = memberRepository.findById(memberService.getCurrentMember().getId())
+        .orElseThrow(() -> new CustomException( ErrorCode.MEMBER_NOT_FOUND));
+
+    ToDo todo = toDoRepository.findById(id)
+        .orElseThrow(() -> new CustomException(ErrorCode.TODO_NOT_FOUND));
+
     todo.update(updateToDo.getTitle(), updateToDo.getContent(), updateToDo.getStatus());
+
     return toDoRepository.save(todo);
   }
+  @Transactional
+  public List<ToDoList> getToDosByProjectIdAndMember(Long projectId) {//로그인 한 사람의 특정 프로젝트 안에서 할 일 조회
+    Member member = memberService.getCurrentMember();
+    System.out.println(member.getId());
+
+    List<ToDo> toDoList = toDoRepository.findByProjectIdAndMemberId(projectId, member.getId());
+
+
+    return toDoList.stream()
+        .map(toDo -> ToDoList.builder()
+            .title(toDo.getTitle())
+            .content(toDo.getContent())
+            .status(toDo.getStatus())
+            .ProjectId(projectId)
+            .build())
+        .collect(Collectors.toList());
+  }
+
+
+
 
 }

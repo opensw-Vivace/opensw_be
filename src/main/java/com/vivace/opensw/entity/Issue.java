@@ -31,6 +31,10 @@ public class Issue extends BaseEntity {
 
     @Column
     @NotNull
+    private String name;
+
+    @Column
+    @NotNull
     @Enumerated(EnumType.STRING)
     private DocsStatus status;
 

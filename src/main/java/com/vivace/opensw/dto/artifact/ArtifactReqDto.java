@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -15,7 +14,7 @@ import java.util.List;
 /**
  * post 요청 시(글 작성 시)사용하는 dto.
  */
-public class ArtifactPostDto {
+public class ArtifactReqDto {
 
     private String title;
 

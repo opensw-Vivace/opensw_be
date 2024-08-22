@@ -1,5 +1,4 @@
-package com.vivace.opensw.dto;
-
+package com.vivace.opensw.dto.invitation;
 
 import lombok.*;
 
@@ -10,7 +9,8 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class InvitationDto {
+public class InvitationResDto {
+
     private Long id;
 
     private Long projectId;
@@ -22,5 +22,4 @@ public class InvitationDto {
     private LocalDateTime createdAt;
 
     private LocalDateTime updateAt;
-
 }
