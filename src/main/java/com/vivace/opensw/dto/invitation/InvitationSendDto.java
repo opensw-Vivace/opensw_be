@@ -1,13 +1,12 @@
 package com.vivace.opensw.dto.invitation;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class InvitationSendDto {
     private Long projectId;
     private Long receiverId;

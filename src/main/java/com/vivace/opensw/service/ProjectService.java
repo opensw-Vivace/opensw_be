@@ -19,23 +19,23 @@ import static com.vivace.opensw.model.Role.ROLE_OWNER;
 @RequiredArgsConstructor
 @Service
 public class ProjectService {
-
-
   private final ArtifactRepository artifactRepository;
   private final ProjectRepository projectRepository;
   private final ArtifactTypeRepository artifactTypeRepository;
-
   private final MemberService memberService;
   private final ParticipateRepository participateRepository;
   private final PositionRepository positionRepository;
   @Transactional
   public Project save(ProjectAddRequestDto addProject) {//프로젝트 생성 메서드
     Project project=projectRepository.save(addProject.toEntity());
+
     List<Position> positionList=new ArrayList<>();
+
     Participate participate= Participate.builder().
         project(project).role(ROLE_OWNER)
         .build();
     participate = participateRepository.save(participate);
+
     for(String positionName: addProject.getPositionName()){
       Position position= Position.builder().position(positionName).
           member(memberService.getCurrentMember())
@@ -46,7 +46,6 @@ public class ProjectService {
       positionList.add(position);
     }
     participate.updatePosition(positionList);
-
     project.getParticipateList().add(participate);
     return project;
   }
@@ -69,6 +68,7 @@ public class ProjectService {
     List<Participate> participates=project.getParticipateList();
     List<ProjectGetMembersDto> result=new ArrayList<>();
 
+
     for(Participate participate:participates){
       List<String> positions=new ArrayList<>();
       String membername=null;
@@ -80,10 +80,9 @@ public class ProjectService {
       }
       result.add(new ProjectGetMembersDto(membername,positions));
     }
+
     System.out.println(memberService.getCurrentMember().getId());
     return result;
-
-
   }
 
 

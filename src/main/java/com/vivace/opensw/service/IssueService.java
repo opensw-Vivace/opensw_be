@@ -35,6 +35,7 @@ public class IssueService {
         title(addIssueDto.getTitle())
         .content(addIssueDto.getContent())
         .status(addIssueDto.getStatus())
+        .name(member.getName())
         .project(project)
         .member(member)
         .build();
@@ -49,9 +50,23 @@ public class IssueService {
             .title(issue.getTitle())
             .content(issue.getContent())
             .status(issue.getStatus())
-            .projectId(projectId)
+            .name(issue.getName())
+            .created_at(issue.getCreatedAt())
             .build())
         .collect(Collectors.toList());
+
+  }
+  public IssueListDto getIssuesDetail(Long issueId){
+    Issue issue=issueRepository.findById(issueId).orElseThrow(()->new CustomException(ErrorCode.ISSUE_NOT_FOUND));
+    IssueListDto issueListDto=new IssueListDto()
+        .builder()
+        .title(issue.getTitle())
+        .status(issue.getStatus())
+        .name(issue.getName())
+        .created_at(issue.getCreatedAt())
+        .content(issue.getContent()).build();
+    return issueListDto;
+
 
   }
 
