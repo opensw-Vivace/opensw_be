@@ -10,5 +10,5 @@ import java.util.List;
 
 public interface TestRepository extends JpaRepository<Test, Long> {
     List<Test> findAllByProjectAndStatusOrderByIdDesc(Project project, TestStatus status);
-    List<Test> findAllByProjectAndMemberAndStatusOrderByIdDesc(Project project, TestStatus status, Member member);
+    List<Test> findAllByProjectAndMemberAndStatusOrderByIdDesc(Project project, Member member, TestStatus status);
 }
