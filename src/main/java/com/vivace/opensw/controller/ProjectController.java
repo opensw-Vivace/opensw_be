@@ -2,8 +2,8 @@ package com.vivace.opensw.controller;
 
 import com.vivace.opensw.dto.project.ProjectAddReqDto;
 
-import com.vivace.opensw.dto.project.ProjectGetMembersDto;
 import com.vivace.opensw.dto.project.ProjectListViewResDto;
+import com.vivace.opensw.dto.project.ProjectMemberInfoResDto;
 import com.vivace.opensw.service.MemberService;
 import com.vivace.opensw.service.ProjectService;
 
@@ -14,12 +14,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
 @RequiredArgsConstructor
 @RestController//겍체 데이터를 json으로 반환하기 위해서 추가함
 public class ProjectController {
 
   private final ProjectService projectService;
-  private final MemberService memberService;
 
   @PostMapping("/projects")//projects를 addproject와 매핑
   public ResponseEntity<Project> addProject(@RequestBody ProjectAddReqDto projectAddReqDto){
@@ -49,8 +49,8 @@ public class ProjectController {
         .body(projectDto);
   }
   @GetMapping("/projects/{projectId}/members")
-  public ResponseEntity<List<ProjectGetMembersDto>> getProjectMembers(@PathVariable("projectId") Long id){
-    List<ProjectGetMembersDto> participants = projectService.getProjectParticipants(id);
+  public ResponseEntity<List<ProjectMemberInfoResDto>> getProjectMembers(@PathVariable("projectId") Long id){
+    List<ProjectMemberInfoResDto> participants = projectService.getProjectParticipants(id);
     return ResponseEntity.status(HttpStatus.OK).body(participants);
   }
 
@@ -70,5 +70,9 @@ public class ProjectController {
     return ResponseEntity.status(HttpStatus.OK).body(projectService.getMyProject());
   }
 
+  @GetMapping ("/projects/{projectId}/me")
+  public ResponseEntity<?> getMyInfoInProject(@PathVariable final Long projectId) {
+    return ResponseEntity.ok().body(projectService.getMyInfoInProject(projectId));
+  }
 
 }

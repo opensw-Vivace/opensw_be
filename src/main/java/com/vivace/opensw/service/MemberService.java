@@ -1,8 +1,7 @@
 package com.vivace.opensw.service;
 
-import com.vivace.opensw.dto.member.MyInfoResDto;
+import com.vivace.opensw.dto.member.MemberInfoResDto;
 import com.vivace.opensw.entity.Member;
-import com.vivace.opensw.entity.Position;
 import com.vivace.opensw.global.exception.CustomException;
 import com.vivace.opensw.global.exception.ErrorCode;
 import com.vivace.opensw.model.MemberStatus;
@@ -13,22 +12,16 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class MemberService {
     private final MemberRepository memberRepository;
-    private final ParticipateService participateService;
 
     @Transactional(readOnly = true)
-    public MyInfoResDto getCurrentMemberInfo(Long projectId) {
-        Member member = getCurrentMember();
-        List<String> positionList = participateService.getPositionsByProjectIdAndMember(projectId, member)
-                .stream().map(p -> p.getPositionName()).collect(Collectors.toList()); // 포지션명이 담긴 문자열 리스트로 변환
-        return MyInfoResDto.from(member, positionList);
+    public MemberInfoResDto getCurrentMemberInfo() {
+        return MemberInfoResDto.from(getCurrentMember());
     }
 
     @Transactional(readOnly = true)
