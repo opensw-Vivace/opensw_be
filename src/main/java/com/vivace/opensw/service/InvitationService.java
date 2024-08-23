@@ -11,14 +11,10 @@ import com.vivace.opensw.global.exception.CustomException;
 import com.vivace.opensw.global.exception.ErrorCode;
 import com.vivace.opensw.model.Role;
 import com.vivace.opensw.repository.InvitationRepository;
-import com.vivace.opensw.repository.MemberRepository;
 import com.vivace.opensw.repository.ParticipateRepository;
 import com.vivace.opensw.repository.ProjectRepository;
 import lombok.RequiredArgsConstructor;
-import org.apache.tomcat.util.digester.ArrayStack;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -30,10 +26,7 @@ import java.util.List;
 public class InvitationService {
 
     private final InvitationRepository InvitationRepository;
-
     private final ProjectRepository projectRepository;
-
-    private final MemberRepository memberRepository;
     private final InvitationRepository invitationRepository;
     private final ParticipateRepository participateRepository;
     private final MemberService memberService;
@@ -95,6 +88,7 @@ public class InvitationService {
 
         // Participate 테이블에 튜플 추가
         Participate participate=new Participate().builder()
+                .member(invitation.getReceiver())
                 .role(Role.ROLE_MEMBER) //기본적으로 권한은 멤버로 추가
                 .project(invitation.getProject())
                 .build();
@@ -103,8 +97,7 @@ public class InvitationService {
         List<Position> positionList=new LinkedList<>();
         for(String positionName:positionListReqDto.getPositionList()){
             Position position=new Position().builder()
-                    .position(positionName)
-                    .member(invitation.getReceiver())
+                    .positionName(positionName)
                     .participate(participate)
                     .build();
             positionList.add(position);

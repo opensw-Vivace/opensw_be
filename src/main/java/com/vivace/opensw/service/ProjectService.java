@@ -19,29 +19,24 @@ import static com.vivace.opensw.model.Role.ROLE_OWNER;
 @Service
 public class ProjectService {
 
-
-  private final ArtifactRepository artifactRepository;
   private final ProjectRepository projectRepository;
-  private final ArtifactTypeRepository artifactTypeRepository;
-  private final ImgRepository imgRepository;
-  private final CreatorRepository creatorRepository;
-  private final MemberRepository memberRepository;
   private final MemberService memberService;
   private final ParticipateRepository participateRepository;
   private final PositionRepository positionRepository;
+
   @Transactional
-  public Project save(ProjectAddRequestDto addProject) {//
+  public Project save(ProjectAddRequestDto addProject) {
     Project project=projectRepository.save(addProject.toEntity());
     List<Position> positionList=new ArrayList<>();
-    Participate participate= Participate.builder().
-        project(project).role(ROLE_OWNER)
-        .build();
+    Participate participate= Participate.builder()
+            .member(memberService.getCurrentMember())
+            .project(project).role(ROLE_OWNER)
+            .build();
     participate = participateRepository.save(participate);
     for(String positionName: addProject.getPositionName()){
-      Position position= Position.builder().position(positionName).
-          member(memberService.getCurrentMember())
-          .participate(participate)
-          .build();
+      Position position= Position.builder().positionName(positionName)
+              .participate(participate)
+              .build();
 
       positionRepository.save(position);
       positionList.add(position);
