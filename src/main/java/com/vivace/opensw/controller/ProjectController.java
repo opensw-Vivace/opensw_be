@@ -22,7 +22,6 @@ public class ProjectController {
 
   @PostMapping("/projects")//projects를 addproject와 매핑
   public ResponseEntity<Project> addProject(@RequestBody ProjectAddReqDto projectAddReqDto){
-
     Project savedProject= projectService.save(projectAddReqDto);
     return ResponseEntity.status(HttpStatus.CREATED)
         .body(savedProject);
