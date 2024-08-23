@@ -8,7 +8,6 @@ import com.vivace.opensw.entity.Test;
 import com.vivace.opensw.global.exception.CustomException;
 import com.vivace.opensw.global.exception.ErrorCode;
 import com.vivace.opensw.model.TestStatus;
-import com.vivace.opensw.repository.PositionRepository;
 import com.vivace.opensw.repository.TestRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -25,12 +24,12 @@ public class TestService {
     private final MemberService memberService;
     private final ProjectService projectService;
     private final TestRepository testRepository;
-    private final PositionRepository positionRepository;
+    private final ParticipateService participateService;
 
     // 테스트 작성
     public void addTest(Long projectId, TestAddReqDto reqDto) {
         Member member = memberService.getCurrentMember();
-        validateParticipation(member.getId(), projectId);
+        participateService.validateParticipation(projectId, member.getId());
 
         Project project = projectService.findById(projectId);
         Test test = TestAddReqDto.toEntity(reqDto, project, member);
@@ -41,7 +40,7 @@ public class TestService {
     @Transactional(readOnly = true)
     public TestListResDto getTestList(Long projectId, Boolean filterOnlyMine) {
         Member member = memberService.getCurrentMember();
-        validateParticipation(member.getId(), projectId);
+        participateService.validateParticipation(projectId, member.getId());
 
         Project project = projectService.findById(projectId);
         List<TestListUnitDto> notStartedTestList = getFilteredTestList(project, TestStatus.NOT_STARTED, member, filterOnlyMine);
@@ -58,13 +57,6 @@ public class TestService {
         } else {
             return testRepository.findAllByProjectAndStatusOrderByIdDesc(project, status)
                     .stream().map(TestListUnitDto::from).collect(Collectors.toList());
-        }
-    }
-
-    // 현재 멤버가 이 프로젝트에 참여중인지 확인
-    private void validateParticipation(Long memberId, Long projectId) throws CustomException {
-        if (!positionRepository.existsByMemberIdAndParticipate_ProjectId(memberId, projectId)){
-            throw new CustomException(ErrorCode.NOT_PARTICIPATING);
         }
     }
 
