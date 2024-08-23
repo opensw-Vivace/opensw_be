@@ -1,117 +1,112 @@
 package com.vivace.opensw.service;
 
-import com.vivace.opensw.dto.project.ProjectAddRequestDto;
-import com.vivace.opensw.dto.project.ProjectGetMembersDto;
-import com.vivace.opensw.dto.project.ProjectListViewResponseDto;
+import com.vivace.opensw.dto.project.ProjectAddReqDto;
+import com.vivace.opensw.dto.project.ProjectListViewResDto;
+import com.vivace.opensw.dto.project.ProjectMemberInfoDto;
+import com.vivace.opensw.entity.Member;
 import com.vivace.opensw.entity.Participate;
 import com.vivace.opensw.entity.Position;
 import com.vivace.opensw.entity.Project;
 import com.vivace.opensw.global.exception.CustomException;
 import com.vivace.opensw.global.exception.ErrorCode;
 import com.vivace.opensw.repository.*;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.vivace.opensw.model.Role.ROLE_OWNER;
 
 @RequiredArgsConstructor
 @Service
 public class ProjectService {
-  private final ArtifactRepository artifactRepository;
-  private final ProjectRepository projectRepository;
-  private final ArtifactTypeRepository artifactTypeRepository;
-  private final MemberService memberService;
-  private final ParticipateRepository participateRepository;
-  private final PositionRepository positionRepository;
+    private final ArtifactRepository artifactRepository;
+    private final ProjectRepository projectRepository;
+    private final ArtifactTypeRepository artifactTypeRepository;
+    private final MemberService memberService;
+    private final PositionRepository positionRepository;
+    private final ParticipateService participateService;
 
-  @Transactional
-  public Project save(ProjectAddRequestDto addProject) {//프로젝트 생성 메서드
-    Project project=projectRepository.save(addProject.toEntity());
+    @Transactional
+    public Project save(ProjectAddReqDto projectAddReqDto) {//프로젝트 생성 메서드
+        Member member = memberService.getCurrentMember();
+        Project project = projectRepository.save(projectAddReqDto.toEntity());
 
-    List<Position> positionList=new ArrayList<>();
+        List<Position> positionList = new ArrayList<>();
+        Participate participate = participateService.save(member, project, ROLE_OWNER);
 
-    Participate participate= Participate.builder().
-        project(project).role(ROLE_OWNER)
-        .build();
-    participate = participateRepository.save(participate);
+        for (String positionName : projectAddReqDto.getPositionName()) {
+            Position position = Position.builder().positionName(positionName)
+                    .participate(participate)
+                    .build();
 
-    for(String positionName: addProject.getPositionName()){
-      Position position= Position.builder().position(positionName).
-          member(memberService.getCurrentMember())
-          .participate(participate)
-          .build();
-
-      positionRepository.save(position);
-      positionList.add(position);
-    }
-    participate.updatePosition(positionList);
-    project.getParticipateList().add(participate);
-    return project;
-  }
-
-  public Project findById(Long id){//특정 프로젝트 찾기
-    return projectRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.PROJECT_NOT_FOUND));
-  }
-
-  public List<Project> findAll(){
-    return projectRepository.findAll();
-  }
-
-  public void deleteById(long id){
-    projectRepository.deleteById(id);
-  }
-  public List<ProjectGetMembersDto> getProjectParticipants(Long id){//프로젝트 멤버 조회
-    //매개변수 프로젝트 아이디
-    Project project=projectRepository.findById(id).
-         orElseThrow(()->new CustomException(ErrorCode.PROJECT_NOT_FOUND));
-    List<Participate> participates=project.getParticipateList();
-    List<ProjectGetMembersDto> result=new ArrayList<>();
-
-
-    for(Participate participate:participates){
-      List<String> positions=new ArrayList<>();
-      String membername=null;
-      for(Position position:participate.getPositionList()){
-        if(membername==null){
-          membername=position.getMember().getName();
+            positionRepository.save(position);
+            positionList.add(position);
         }
-        positions.add(position.getPosition());
-      }
-      result.add(new ProjectGetMembersDto(membername,positions));
+        participate.updatePosition(positionList);
+        project.getParticipateList().add(participate);
+        return project;
     }
 
-    System.out.println(memberService.getCurrentMember().getId());
-    return result;
-  }
+    public Project findById(Long id) {//특정 프로젝트 찾기
+        return projectRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.PROJECT_NOT_FOUND));
+    }
 
-  /**
-   * 내가 참여중인 프로젝트 리스트 반환
-   */
-  public List<ProjectListViewResponseDto> getMyProject(){
+    public void deleteById(long id) {
+        projectRepository.deleteById(id);
+    }
 
-      //현재 멤버가 참여중인 모든 포지션 리스트 가져옴
-      List<Position> positionList=positionRepository.findAllByMember(memberService.getCurrentMember())
-              .orElseThrow(()->new CustomException(ErrorCode.POSITION_NOT_FOUND));
+    //프로젝트 멤버 조회
+    @Transactional(readOnly = true)
+    public List<ProjectMemberInfoDto> getProjectParticipants(Long id) {
+        //매개변수 프로젝트 아이디
+        Project project = findById(id);
 
-      // position으로부터 프로젝트 리스트 생성
-      // position -> participate -> project
-      Set<Project> projectSet=new LinkedHashSet<>(); //중복 제거를 위해 set사용
-      for(Position position:positionList){
-        projectSet.add(position.getParticipate().getProject());
-      }
+        List<Participate> participateList = participateService.getParticipatesByProject(project);
 
-      //dto로 변경해서 출력
-      List<ProjectListViewResponseDto> projectListViewResponseDtoList=new ArrayList<>();
-      for(Project project: projectSet){
-        projectListViewResponseDtoList.add(ProjectListViewResponseDto.from(project));
-      }
+        List<ProjectMemberInfoDto> memberDtoList = participateList.stream()
+                .map(participate -> {
+                    String name = participate.getMember().getName();
+                    List<String> positionNameList = participate.getPositionList().stream()
+                            .map(position -> position.getPositionName())
+                            .toList();
+                    return new ProjectMemberInfoDto(name, participate.getRole(), positionNameList);
+                })
+                .toList();
 
-      return projectListViewResponseDtoList;
-  }
+        return memberDtoList;
+    }
 
+    // 프로젝트에서의 나의 정보
+    @Transactional(readOnly = true)
+    public ProjectMemberInfoDto getMyInfoInProject(Long id) {
+        Project project = findById(id);
+        Member member = memberService.getCurrentMember();
 
+        Participate participate = participateService.getParticipateByProjectAndMember(project, member);
 
+        // 포지션명이 담긴 문자열 리스트로 변환
+        List<String> positionNameList = participate.getPositionList().stream()
+                .map(position -> position.getPositionName())
+                .toList();
+
+        return ProjectMemberInfoDto.from(member, participate.getRole(), positionNameList);
+    }
+
+    /**
+     * 내가 참여중인 프로젝트 리스트 반환
+     */
+    @Transactional(readOnly = true)
+    public List<ProjectListViewResDto> getMyProject() {
+        //현재 멤버가 참여중인 모든 포지션 리스트 가져옴
+        List<Participate> participateList = participateService.getParticipatesByMember(memberService.getCurrentMember());
+
+        List<ProjectListViewResDto> projectListViewResDtoList = participateList.stream()
+                .map(participate -> ProjectListViewResDto.from(participate.getProject()))
+                .collect(Collectors.toList());
+        return projectListViewResDtoList;
+    }
 }

@@ -1,10 +1,10 @@
-package com.vivace.opensw.dto.member.request;
+package com.vivace.opensw.dto.member;
 
 import com.vivace.opensw.entity.Member;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 
-public record SignUpRequestDto (
+public record SignUpReqDto(
     @Email(message = "INVALID_INPUT_FORMAT-유효한 이메일 형식이 아닙니다.")
     @NotEmpty(message = "INVALID_INPUT_VALUE-이메일을 입력하세요.")
     String email,

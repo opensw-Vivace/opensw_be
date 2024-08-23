@@ -1,8 +1,8 @@
 package com.vivace.opensw.service;
 
 
-import com.vivace.opensw.dto.member.request.LoginRequestDto;
-import com.vivace.opensw.dto.member.request.SignUpRequestDto;
+import com.vivace.opensw.dto.member.LoginReqDto;
+import com.vivace.opensw.dto.member.SignUpReqDto;
 import com.vivace.opensw.entity.Member;
 import com.vivace.opensw.global.auth.JwtUtil;
 import com.vivace.opensw.global.exception.CustomException;
@@ -29,12 +29,12 @@ public class AuthService {
     private final JwtUtil jwtUtil;
     private final MemberService memberService;
 
-    public void signUp(SignUpRequestDto requestDto) {
-        if (!requestDto.pw().equals(requestDto.confirmPw())) {
+    public void signUp(SignUpReqDto reqDto) {
+        if (!reqDto.pw().equals(reqDto.confirmPw())) {
             throw new CustomException(ErrorCode.PASSWORD_MISMATCH);
         }
 
-       Optional<Member> memberOptional = memberService.getMemberOptionalByEmail(requestDto.email());
+       Optional<Member> memberOptional = memberService.getMemberOptionalByEmail(reqDto.email());
        if (memberOptional.isPresent()) {
             if (memberOptional.get().getMemberStatus().equals(MemberStatus.DELETED)){
                 throw new CustomException(ErrorCode.MEMBER_STATUS_DELETED);
@@ -43,14 +43,14 @@ public class AuthService {
         }
 
         //Member 객체 생성 후 저장
-        Member member = requestDto.toEntity(encodePassword(requestDto.pw()));
+        Member member = reqDto.toEntity(encodePassword(reqDto.pw()));
         memberService.saveMember(member);
     }
 
-    public String login(LoginRequestDto requestDto){
+    public String login(LoginReqDto reqDto){
         try {
             Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(requestDto.email(), requestDto.pw(), Collections.emptyList())
+                    new UsernamePasswordAuthenticationToken(reqDto.email(), reqDto.pw(), Collections.emptyList())
             );
             return jwtUtil.generateAccessToken(authentication);
         } catch (BadCredentialsException e){
