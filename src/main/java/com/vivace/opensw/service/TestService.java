@@ -62,8 +62,7 @@ public class TestService {
     }
 
     // 현재 멤버가 이 프로젝트에 참여중인지 확인
-    private void validateParticipation(Long memberId, Long projectId)
-    {
+    private void validateParticipation(Long memberId, Long projectId) throws CustomException {
         if (!positionRepository.existsByMemberIdAndParticipate_ProjectId(memberId, projectId)){
             throw new CustomException(ErrorCode.NOT_PARTICIPATING);
         }
@@ -91,7 +90,7 @@ public class TestService {
     }
 
     @Transactional(readOnly = true)
-    public Test getTestById(Long testId) {
+    public Test getTestById(Long testId) throws CustomException {
         return testRepository.findById(testId)
                 .orElseThrow(() -> new CustomException(ErrorCode.TEST_NOT_FOUND));
     }
