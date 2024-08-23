@@ -15,6 +15,7 @@ import com.vivace.opensw.repository.ParticipateRepository;
 import com.vivace.opensw.repository.ProjectRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -80,6 +81,7 @@ public class InvitationService {
     /**
      * 초대장 수락
      */
+    @Transactional
     public void accept(Long id, PositionListReqDto positionListReqDto){
         //초대장 엔티티 가져옴
         Invitation invitation=invitationRepository.findById(id)

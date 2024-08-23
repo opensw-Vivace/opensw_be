@@ -1,8 +1,6 @@
 package com.vivace.opensw.dto.project;
 
-import com.vivace.opensw.entity.Participate;
 import com.vivace.opensw.entity.Project;
-import com.vivace.opensw.entity.Position;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,7 +9,7 @@ import java.util.List;
 
 @Getter
 @Setter
-public class ProjectAddRequestDto {
+public class ProjectAddReqDto {
     private String title;
     private String teamName;
     private LocalDate deadline;
