@@ -1,8 +1,8 @@
 package com.vivace.opensw.controller;
 
 
-import com.vivace.opensw.dto.member.request.LoginRequestDto;
-import com.vivace.opensw.dto.member.request.SignUpRequestDto;
+import com.vivace.opensw.dto.member.LoginReqDto;
+import com.vivace.opensw.dto.member.SignUpReqDto;
 import com.vivace.opensw.service.AuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -19,13 +19,13 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/signup")
-    public ResponseEntity<?> signUp(@Valid @RequestBody SignUpRequestDto requestDto){
+    public ResponseEntity<?> signUp(@Valid @RequestBody SignUpReqDto requestDto){
         authService.signUp(requestDto);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@Valid @RequestBody LoginRequestDto requestDto){
+    public ResponseEntity<?> login(@Valid @RequestBody LoginReqDto requestDto){
         String accessToken = authService.login(requestDto);
         HttpHeaders headers = new HttpHeaders();
         headers.set(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken);
