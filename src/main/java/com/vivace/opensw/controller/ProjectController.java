@@ -3,8 +3,7 @@ package com.vivace.opensw.controller;
 import com.vivace.opensw.dto.project.ProjectAddReqDto;
 
 import com.vivace.opensw.dto.project.ProjectListViewResDto;
-import com.vivace.opensw.dto.project.ProjectMemberInfoResDto;
-import com.vivace.opensw.service.MemberService;
+import com.vivace.opensw.dto.project.ProjectMemberInfoDto;
 import com.vivace.opensw.service.ProjectService;
 
 import com.vivace.opensw.entity.Project;
@@ -49,8 +48,8 @@ public class ProjectController {
         .body(projectDto);
   }
   @GetMapping("/projects/{projectId}/members")
-  public ResponseEntity<List<ProjectMemberInfoResDto>> getProjectMembers(@PathVariable("projectId") Long id){
-    List<ProjectMemberInfoResDto> participants = projectService.getProjectParticipants(id);
+  public ResponseEntity<List<ProjectMemberInfoDto>> getProjectMembers(@PathVariable("projectId") Long id){
+    List<ProjectMemberInfoDto> participants = projectService.getProjectParticipants(id);
     return ResponseEntity.status(HttpStatus.OK).body(participants);
   }
 

@@ -2,7 +2,7 @@ package com.vivace.opensw.service;
 
 import com.vivace.opensw.dto.project.ProjectAddReqDto;
 import com.vivace.opensw.dto.project.ProjectListViewResDto;
-import com.vivace.opensw.dto.project.ProjectMemberInfoResDto;
+import com.vivace.opensw.dto.project.ProjectMemberInfoDto;
 import com.vivace.opensw.entity.Member;
 import com.vivace.opensw.entity.Participate;
 import com.vivace.opensw.entity.Position;
@@ -61,19 +61,19 @@ public class ProjectService {
 
     //프로젝트 멤버 조회
     @Transactional(readOnly = true)
-    public List<ProjectMemberInfoResDto> getProjectParticipants(Long id) {
+    public List<ProjectMemberInfoDto> getProjectParticipants(Long id) {
         //매개변수 프로젝트 아이디
         Project project = findById(id);
 
         List<Participate> participateList = participateService.getParticipatesByProject(project);
 
-        List<ProjectMemberInfoResDto> memberDtoList = participateList.stream()
+        List<ProjectMemberInfoDto> memberDtoList = participateList.stream()
                 .map(participate -> {
                     String name = participate.getMember().getName();
                     List<String> positionNameList = participate.getPositionList().stream()
                             .map(position -> position.getPositionName())
                             .toList();
-                    return new ProjectMemberInfoResDto(name, participate.getRole(), positionNameList);
+                    return new ProjectMemberInfoDto(name, participate.getRole(), positionNameList);
                 })
                 .toList();
 
@@ -82,7 +82,7 @@ public class ProjectService {
 
     // 프로젝트에서의 나의 정보
     @Transactional(readOnly = true)
-    public ProjectMemberInfoResDto getMyInfoInProject(Long id) {
+    public ProjectMemberInfoDto getMyInfoInProject(Long id) {
         Project project = findById(id);
         Member member = memberService.getCurrentMember();
 
@@ -93,7 +93,7 @@ public class ProjectService {
                 .map(position -> position.getPositionName())
                 .toList();
 
-        return ProjectMemberInfoResDto.from(member, participate.getRole(), positionNameList);
+        return ProjectMemberInfoDto.from(member, participate.getRole(), positionNameList);
     }
 
     /**
