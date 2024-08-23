@@ -1,9 +1,9 @@
 package com.vivace.opensw.controller;
 
 import com.vivace.opensw.dto.project.ProjectAddRequestDto;
+
+import com.vivace.opensw.dto.project.ProjectGetMembersDto;
 import com.vivace.opensw.dto.project.ProjectListViewResponseDto;
-import com.vivace.opensw.entity.Member;
-import com.vivace.opensw.entity.Participate;
 import com.vivace.opensw.service.MemberService;
 import com.vivace.opensw.service.ProjectService;
 
@@ -11,7 +11,6 @@ import com.vivace.opensw.entity.Project;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -31,16 +30,16 @@ public class ProjectController {
 
   }
 
-  @GetMapping("/projects")
-  public ResponseEntity<List<ProjectListViewResponseDto>> getProjects() {
-    List<ProjectListViewResponseDto> projects = projectService.findAll()
-        .stream()
-        .map(ProjectListViewResponseDto::from)
-        .toList();
-
-    return ResponseEntity.status(HttpStatus.CREATED)
-        .body(projects);
-  }
+//  @GetMapping("/projects")
+//  public ResponseEntity<List<ProjectListViewResponseDto>> getProjects() {
+//    List<ProjectListViewResponseDto> projects = projectService.findAll()
+//        .stream()
+//        .map(ProjectListViewResponseDto::from)
+//        .toList();
+//
+//    return ResponseEntity.status(HttpStatus.CREATED)
+//        .body(projects);
+//  }
 
   @GetMapping("/projects/{projectId}")
   public ResponseEntity<ProjectListViewResponseDto> getProject(@PathVariable("projectId") Long id){
@@ -50,22 +49,25 @@ public class ProjectController {
         .body(projectDto);
   }
   @GetMapping("/projects/{projectId}/members")
-  public ResponseEntity<List<Participate>> getProjectMembers(@PathVariable("projectId") Long id){
-    Project project=projectService.findById(id);
-    if(project==null){
-      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-    }
-    List<Participate> participates=projectService.getProjectParticipants(id);
-    return ResponseEntity.status(HttpStatus.CREATED)
-        .body(participates);
+  public ResponseEntity<List<ProjectGetMembersDto>> getProjectMembers(@PathVariable("projectId") Long id){
+    List<ProjectGetMembersDto> participants = projectService.getProjectParticipants(id);
+    return ResponseEntity.status(HttpStatus.OK).body(participants);
   }
 
 
 
   @DeleteMapping("/projects/{id}")
-  public ResponseEntity<Void> deleteProjects(@PathVariable long id){
+  public ResponseEntity<Void> deleteProjects(@PathVariable Long id){
     projectService.deleteById(id);
     return ResponseEntity.ok().build();
+  }
+
+  /**
+   * 현재 로그인 한 멤버가 참여중인 프로젝트 dto 반환
+   */
+  @GetMapping("/projects")
+  public ResponseEntity<List<ProjectListViewResponseDto>> getMyProject(){
+    return ResponseEntity.status(HttpStatus.OK).body(projectService.getMyProject());
   }
 
 

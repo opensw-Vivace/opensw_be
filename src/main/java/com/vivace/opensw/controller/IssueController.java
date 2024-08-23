@@ -18,13 +18,20 @@ import java.util.List;
 public class IssueController {
   private final IssueService issueService;
   @PostMapping("/projects/{projectId}/issues")
-  public ResponseEntity<Issue> addToDo(@RequestBody AddIssueDto addIssueDto, @PathVariable("projectId") Long id){
+  public ResponseEntity<Issue> addIssue(@RequestBody AddIssueDto addIssueDto, @PathVariable("projectId") Long id){
     Issue issue=issueService.save(addIssueDto);
     return ResponseEntity.ok().body(issue);
   }
-//  @GetMapping("/projects/{projectId}/issues")
-//  public ResponseEntity<List<IssueListDto>> getToDoList(@PathVariable("projectId") Long projectid){
-//    List<IssueListDto> issueListDtos=issueService.getIssuesByProjectId(projectid);
-//    return ResponseEntity.ok().body(issueListDtos);
-//  }
+  @GetMapping("/projects/{projectId}/issues")
+  public ResponseEntity<List<IssueListDto>> getIssueList(@PathVariable("projectId") Long projectid){
+    List<IssueListDto> issueListDtos=issueService.getIssuesByProjectId(projectid);
+    return ResponseEntity.ok().body(issueListDtos);
+  }
+  @GetMapping("/issues/{issueId}")
+  public ResponseEntity<IssueListDto> getIssueDetail(@PathVariable("issueId") Long id){
+    IssueListDto issueListDto=issueService.getIssuesDetail(id);
+    return ResponseEntity.ok().body(issueListDto);
+  }
+
+
 }

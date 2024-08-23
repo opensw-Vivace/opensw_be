@@ -47,7 +47,11 @@ public enum ErrorCode {
     ARTIFACT_TYPE_NOT_FOUND(404, "산출물 종류를 찾을 수 없습니다"),
     PROJECT_NOT_FOUND(404,"프로젝트를 찾을 수 없습니다"),
     TODO_NOT_FOUND(404,"할 일을 찾을 수 없습니다"),
+    POSITION_NOT_FOUND(404, "역할을 찾을 수 없습니다"),
     TEST_NOT_FOUND(404, "테스트를 찾을 수 없습니다."),
+
+    ISSUE_NOT_FOUND(404,"이슈를 찾을 수 없습니다"),
+
 
     // 409 Conflict
     // 중복 리소스 생성 시도
