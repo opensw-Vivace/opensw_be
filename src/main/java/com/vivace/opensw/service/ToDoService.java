@@ -77,11 +77,7 @@ public class ToDoService {
 
   @Transactional
   public ToDo update(Long id, UpdateToDo updateToDo) {//할 일 수정 메서드
-    Project project = projectRepository.findById(updateToDo.getProjectId())
-        .orElseThrow(() -> new CustomException(ErrorCode.PROJECT_NOT_FOUND));
 
-    Member member = memberRepository.findById(memberService.getCurrentMember().getId())
-        .orElseThrow(() -> new CustomException( ErrorCode.MEMBER_NOT_FOUND));
 
     ToDo todo = toDoRepository.findById(id)
         .orElseThrow(() -> new CustomException(ErrorCode.TODO_NOT_FOUND));
