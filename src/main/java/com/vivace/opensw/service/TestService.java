@@ -53,10 +53,10 @@ public class TestService {
     @Transactional(readOnly = true)
     public List<TestListUnitDto> getFilteredTestList(Project project, TestStatus status, Member member, Boolean filterOnlyMine) {
         if (filterOnlyMine) {
-            return testRepository.findAllByProjectAndStatusOrderByIdDesc(project, status)
+            return testRepository.findAllByProjectAndMemberAndStatusOrderByIdDesc(project, status, member)
                     .stream().map(TestListUnitDto::from).collect(Collectors.toList());
         } else {
-            return testRepository.findAllByProjectAndMemberAndStatusOrderByIdDesc(project, status, member)
+            return testRepository.findAllByProjectAndStatusOrderByIdDesc(project, status)
                     .stream().map(TestListUnitDto::from).collect(Collectors.toList());
         }
     }
