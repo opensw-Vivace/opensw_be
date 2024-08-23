@@ -37,18 +37,35 @@ public class TestService {
         testRepository.save(test);
     }
 
-    // 테스트 목록 조회
+    // 테스트 목록 조회 (filterOnlyMine으로 내것만 볼지를 구분)
     @Transactional(readOnly = true)
-    public TestListResDto getTestList(Long projectId) {
+    public TestListResDto getTestList(Long projectId, Boolean filterOnlyMine) {
         Member member = memberService.getCurrentMember();
         validateParticipation(member.getId(), projectId);
 
         Project project = projectService.findById(projectId);
-        List<TestListUnitDto> notStartedTestList = getTestsByProject(project, TestStatus.NOT_STARTED)
-                .stream().map(TestListUnitDto::from).collect(Collectors.toList());
-        List<TestListUnitDto> completedTestList = getTestsByProject(project, TestStatus.COMPLETED)
-                .stream().map(TestListUnitDto::from).collect(Collectors.toList());
+        List<TestListUnitDto> notStartedTestList = getFilteredTestList(project, TestStatus.NOT_STARTED, member, filterOnlyMine);
+        List<TestListUnitDto> completedTestList = getFilteredTestList(project, TestStatus.COMPLETED, member, filterOnlyMine);
         return new TestListResDto(notStartedTestList, completedTestList);
+    }
+
+    // filterOnlyMine에 따라 다르게 조회
+    @Transactional(readOnly = true)
+    public List<TestListUnitDto> getFilteredTestList(Project project, TestStatus status, Member member, Boolean filterOnlyMine) {
+        if (filterOnlyMine) {
+            return testRepository.findAllByProjectAndMemberAndStatusOrderByIdDesc(project, member, status)
+                    .stream().map(TestListUnitDto::from).collect(Collectors.toList());
+        } else {
+            return testRepository.findAllByProjectAndStatusOrderByIdDesc(project, status)
+                    .stream().map(TestListUnitDto::from).collect(Collectors.toList());
+        }
+    }
+
+    // 현재 멤버가 이 프로젝트에 참여중인지 확인
+    private void validateParticipation(Long memberId, Long projectId) throws CustomException {
+        if (!positionRepository.existsByMemberIdAndParticipate_ProjectId(memberId, projectId)){
+            throw new CustomException(ErrorCode.NOT_PARTICIPATING);
+        }
     }
 
     // 개별 테스트 상세 조회
@@ -72,21 +89,8 @@ public class TestService {
         testRepository.delete(test);
     }
 
-    // 현재 멤버가 이 프로젝트에 참여중인지 확인
-    private void validateParticipation(Long memberId, Long projectId)
-    {
-        if (!positionRepository.existsByMemberIdAndParticipate_ProjectId(memberId, projectId)){
-            throw new CustomException(ErrorCode.NOT_PARTICIPATING);
-        }
-    }
-
     @Transactional(readOnly = true)
-    public List<Test> getTestsByProject(Project project, TestStatus status) {
-        return testRepository.findAllByProjectAndStatusOrderByIdDesc(project, status);
-    }
-
-    @Transactional(readOnly = true)
-    public Test getTestById(Long testId) {
+    public Test getTestById(Long testId) throws CustomException {
         return testRepository.findById(testId)
                 .orElseThrow(() -> new CustomException(ErrorCode.TEST_NOT_FOUND));
     }

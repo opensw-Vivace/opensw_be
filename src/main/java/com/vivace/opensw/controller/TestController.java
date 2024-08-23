@@ -21,11 +21,18 @@ public class TestController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    // 테스트 목록 조회
+    // 해당 프로젝트의 테스트 목록 조회
     @GetMapping("/projects/{projectId}/tests")
     public ResponseEntity<?> getTestList(@PathVariable final Long projectId) {
-        return ResponseEntity.ok().body(testService.getTestList(projectId));
+        return ResponseEntity.ok().body(testService.getTestList(projectId, false));
     }
+
+    // 나의 테스트 목록 조회
+    @GetMapping("/projects/{projectId}/tests/me")
+    public ResponseEntity<?> getTestListOfMine(@PathVariable final Long projectId) {
+        return ResponseEntity.ok().body(testService.getTestList(projectId, true));
+    }
+
 
     // 개별 테스트 상세 조회
     @GetMapping("/tests/{testId}")
