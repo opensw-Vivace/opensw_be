@@ -12,5 +12,5 @@ public class UpdateIssueDto {
   private String title;
   private DocsStatus status;
   private String content;
-  private Long issueId;
+
 }
