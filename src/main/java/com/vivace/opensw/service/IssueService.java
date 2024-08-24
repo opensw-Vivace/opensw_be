@@ -2,6 +2,7 @@ package com.vivace.opensw.service;
 
 import com.vivace.opensw.dto.issue.AddIssueDto;
 import com.vivace.opensw.dto.issue.IssueListDto;
+import com.vivace.opensw.dto.issue.UpdateIssueDto;
 import com.vivace.opensw.entity.Issue;
 import com.vivace.opensw.entity.Member;
 import com.vivace.opensw.entity.Project;
@@ -12,6 +13,7 @@ import com.vivace.opensw.repository.IssueRepository;
 import com.vivace.opensw.repository.MemberRepository;
 import com.vivace.opensw.repository.ProjectRepository;
 import com.vivace.opensw.repository.ToDoRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -67,7 +69,15 @@ public class IssueService {
         .content(issue.getContent()).build();
     return issueListDto;
 
-
   }
+  @Transactional
+  public Issue update(Long id, UpdateIssueDto issueDto){
+    Issue issue=issueRepository.findById(id).orElseThrow(()->new CustomException(ErrorCode.ISSUE_NOT_FOUND));
+    issue.update(issueDto.getTitle(),issueDto.getStatus(),issueDto.getContent());
+    return issueRepository.save(issue);
+  }
+
+
+
 
 }
