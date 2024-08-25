@@ -3,17 +3,14 @@ package com.vivace.opensw.dto.issue;
 import com.vivace.opensw.model.DocsStatus;
 import lombok.*;
 
-import java.time.LocalDateTime;
-
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter
 @Setter
+@Getter
 @Builder
-public class IssueListDto {
+public class UpdateIssueDto {
   private String title;
-  private String name;
-  private String content;
   private DocsStatus status;
-  private LocalDateTime created_at;
+  private String content;
+
 }

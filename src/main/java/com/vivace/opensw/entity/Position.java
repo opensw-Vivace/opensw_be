@@ -8,7 +8,7 @@ import lombok.*;
 
 @Entity
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class Position {
@@ -20,12 +20,7 @@ public class Position {
     @Column
     @NotNull
     @NotBlank
-    private String position;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id", updatable = false)
-    @JsonIgnore
-    private Member member;
+    private String positionName;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "participate_id", updatable = false)

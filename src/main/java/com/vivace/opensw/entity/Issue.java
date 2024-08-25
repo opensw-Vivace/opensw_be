@@ -31,6 +31,10 @@ public class Issue extends BaseEntity {
 
     @Column
     @NotNull
+    private String name;
+
+    @Column
+    @NotNull
     @Enumerated(EnumType.STRING)
     private DocsStatus status;
 
@@ -43,4 +47,9 @@ public class Issue extends BaseEntity {
     @JoinColumn(name = "member_id")
     @JsonIgnore
     private Member member;
+    public void update(String title,DocsStatus status,String content){
+        this.title=title;
+        this.status=status;
+        this.content=content;
+    }
 }

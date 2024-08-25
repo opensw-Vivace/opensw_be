@@ -11,7 +11,7 @@ import java.util.List;
 
 @Entity
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class Participate extends BaseEntity {
@@ -26,13 +26,20 @@ public class Participate extends BaseEntity {
     private Role role;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id", updatable = false)
+    @JsonIgnore
+    private Member member;
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "project_id", updatable = false)
     @JsonIgnore
     private Project project;
 
     @OneToMany(mappedBy = "participate", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Position> positionList;
+
     public void updatePosition(List<Position> positionList){
         this.positionList=positionList;
     }
+
 }
