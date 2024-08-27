@@ -1,6 +1,8 @@
 package com.vivace.opensw.entity;
 
 import com.vivace.opensw.model.ProjectStatus;
+import com.vivace.opensw.model.UPPhaseStatus;
+import com.vivace.opensw.model.UPStatus;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -46,6 +48,22 @@ public class Project {
     @Enumerated(EnumType.STRING)
     private ProjectStatus status;
 
+    /*
+    Unified Process를 위한 필드 설정
+     */
+    @Column
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    private UPPhaseStatus phase; //현재 phase
+
+    @Column
+    @NotNull
+    private int phaseNum; //현재 phase의 몇 번째 반복인지.
+
+    @Column
+    @NotNull
+    private LocalDate iterStartDate; //반복 시작일.
+
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Participate> participateList;
 
@@ -79,5 +97,18 @@ public class Project {
         this.invitationList = new ArrayList<>();
         this.artifactList = new ArrayList<>();
         this.necessaryArtifactTypeList = new ArrayList<>();
+
+        this.phase=UPPhaseStatus.INCEPTION;
+        this.phaseNum=1;
+        this.iterStartDate=LocalDate.now();
+    }
+
+    public void updateUPStatus(UPStatus upStatus){
+        phase=upStatus.getPhase();
+        phaseNum =upStatus.getPhaseNum();
+    }
+
+    public void clearIterStartDate(){
+        iterStartDate=LocalDate.now();
     }
 }
