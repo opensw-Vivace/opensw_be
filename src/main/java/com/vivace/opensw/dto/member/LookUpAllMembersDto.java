@@ -10,4 +10,5 @@ import lombok.*;
 public class LookUpAllMembersDto {
   private String email;
   private String name;
+  private Long memberId;
 }

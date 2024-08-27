@@ -1,5 +1,6 @@
 package com.vivace.opensw.controller;
 
+import com.vivace.opensw.dto.member.LookUpAllMembersDto;
 import com.vivace.opensw.entity.Member;
 import com.vivace.opensw.service.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +20,7 @@ public class MemberController {
         return ResponseEntity.ok().body(memberService.getCurrentMemberInfo());
     }
     @GetMapping("/members")
-    public ResponseEntity<List<Member>> getAllMember(){
+    public ResponseEntity<List<LookUpAllMembersDto>> getAllMember(){
         return ResponseEntity.ok().body(memberService.findAllMember());
     }
 }
