@@ -33,3 +33,4 @@ public class ArtifactReqDto {
     private List<Long> writerIdList; //작성자 id리스트.
 
 }
+

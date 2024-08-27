@@ -97,6 +97,10 @@ public class Project {
         this.invitationList = new ArrayList<>();
         this.artifactList = new ArrayList<>();
         this.necessaryArtifactTypeList = new ArrayList<>();
+
+        this.phase=UPPhaseStatus.INCEPTION;
+        this.phaseNum=1;
+        this.iterStartDate=LocalDate.now();
     }
 
     public void updateUPStatus(UPStatus upStatus){
