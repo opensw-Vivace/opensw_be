@@ -67,7 +67,7 @@ public class InvitationService {
                     .senderId(Invitation.getSender().getId())
                     .receiverId(Invitation.getReceiver().getId())
                     .createdAt(Invitation.getCreatedAt())
-                    .updateAt(Invitation.getUpdatedAt())
+                    .updatedAt(Invitation.getUpdatedAt())
                     .build();
 
             invitationResDtoList.add(invitationResDto);

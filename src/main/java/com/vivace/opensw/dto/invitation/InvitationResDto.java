@@ -21,5 +21,5 @@ public class InvitationResDto {
 
     private LocalDateTime createdAt;
 
-    private LocalDateTime updateAt;
+    private LocalDateTime updatedAt;
 }
