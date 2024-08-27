@@ -1,6 +1,7 @@
 package com.vivace.opensw.service;
 
 import com.vivace.opensw.dto.necessary.NecessaryReqDto;
+import com.vivace.opensw.dto.necessary.NecessaryResDto;
 import com.vivace.opensw.entity.NecessaryArtifactType;
 import com.vivace.opensw.global.exception.CustomException;
 import com.vivace.opensw.global.exception.ErrorCode;
@@ -12,6 +13,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.LinkedList;
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class NecessaryArtifactService {
@@ -19,6 +23,7 @@ public class NecessaryArtifactService {
     private final NecessaryArtifactTypeRepository necessaryArtifactTypeRepository;
     private final ArtifactTypeRepository artifactTypeRepository;
     private final ProjectRepository projectRepository;
+
 
     /**
      * 필수 산출물 설정
@@ -52,5 +57,24 @@ public class NecessaryArtifactService {
             return HttpStatus.OK;
         }
 
+    }
+
+
+    /***
+     *  프로젝트의 필수 산출물 조회
+     */
+    public List<NecessaryResDto> getNecessary(Long projectId){
+        List<NecessaryArtifactType> necessaryArtifactTypeList=necessaryArtifactTypeRepository.findByProjectId(projectId);
+        List<NecessaryResDto> necessaryResDtoList=new LinkedList<>();
+        for(NecessaryArtifactType necessaryArtifactType:necessaryArtifactTypeList){
+
+            Long typeId=necessaryArtifactType.getArtifactType().getId();
+            String typeName=artifactTypeRepository.findById(typeId)
+                    .orElseThrow(()->new CustomException(ErrorCode.ARTIFACT_TYPE_NOT_FOUND))
+                    .getType();
+
+            necessaryResDtoList.add(new NecessaryResDto(typeId, typeName));
+        }
+        return necessaryResDtoList;
     }
 }
