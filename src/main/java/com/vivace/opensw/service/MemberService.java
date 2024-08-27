@@ -1,5 +1,6 @@
 package com.vivace.opensw.service;
 
+import com.vivace.opensw.dto.member.LookUpAllMembersDto;
 import com.vivace.opensw.dto.member.MemberInfoResDto;
 import com.vivace.opensw.entity.Member;
 import com.vivace.opensw.global.exception.CustomException;
@@ -12,7 +13,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -63,5 +66,19 @@ public class MemberService {
     @Transactional
     public void saveMember(Member member) {
         memberRepository.save(member);
+    }
+    @Transactional
+    public List<LookUpAllMembersDto> findAllMember(){
+        List<Member> memberList=memberRepository.findAll();
+        return memberList.stream()
+            .map(member -> LookUpAllMembersDto.builder()
+                .email(member.getEmail())
+                .name(member.getName())
+                .memberId(member.getId())
+                .build())
+            .collect(Collectors.toList());
+
+
+
     }
 }
