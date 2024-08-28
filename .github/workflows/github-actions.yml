@@ -84,4 +84,11 @@ jobs:
             --region eu-north-1 \
             build s3://opensw-bucket \
             --delete
-        working-directory: ./my-agora-states-client
+#        working-directory: ./my-agora-states-client
+
+      - name: Make application.properties
+        run: |
+          mkdir ./src/main/resources 
+          cd ./src/main/resources
+          touch ./application.properties
+          echo "${{ secrets.APPLICATION_PROPERTIES }}" > ./application.properties
