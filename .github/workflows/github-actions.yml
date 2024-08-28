@@ -65,3 +65,23 @@ jobs:
             sudo docker pull ${{ secrets.DOCKER_REPO }}:latest
             sudo docker run -d -p 8080:8080 ${{ secrets.DOCKER_REPO }}:latest            
             sudo docker image prune -f
+
+      - name: SHOW AWS CLI VERSION
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.S3_ACCESS_KEY }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.S3_SECRET_KEY }}
+          AWS_EC2_METADATA_DISABLED: true
+        run: |
+          aws --version
+
+      - name: Sync Bucket
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.S3_ACCESS_KEY }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.S3_SECRET_KEY }}
+          AWS_EC2_METADATA_DISABLED: true
+        run: |
+          aws s3 sync \
+            --region eu-north-1 \
+            build s3://opensw-bucket \
+            --delete
+        working-directory: ./my-agora-states-client
