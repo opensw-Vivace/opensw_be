@@ -22,6 +22,13 @@ public enum ErrorCode {
     PASSWORD_MISMATCH(400, "confirmPw:비밀번호가 일치하지 않습니다."),
     // enum 값이 잘못됨
     INVALID_ENUM_VALUE(400, "enum 값이 잘못되었습니다."),
+    // 빈 사진 업로드
+    EMPTY_FILE_EXCEPTION(400, "빈 파일입니다."),
+    // 업로드 예외
+    IO_EXCEPTION_ON_IMAGE_UPLOAD(400, "파일 업로드 시 오류가 발생하였습니다."),
+    PUT_OBJECT_EXCEPTION(400, "파일 업로드 시 오류가 발생하였습니다."),
+    IO_EXCEPTION_ON_IMAGE_DELETE(400, "파일 삭제 시 오류가 발생하였습니다"),
+
 
     // 401 Unauthorized
     // 로그인 상태여야 하는 요청
@@ -51,6 +58,9 @@ public enum ErrorCode {
     TEST_NOT_FOUND(404, "테스트를 찾을 수 없습니다."),
 
     ISSUE_NOT_FOUND(404,"이슈를 찾을 수 없습니다"),
+
+    NO_FILE_EXTENTION(404, "해당 파일을 찾을 수 없습니다"),
+    INVALID_FILE_EXTENTION(404, "유효한 파일이 아닙니다"),
 
 
     // 409 Conflict
